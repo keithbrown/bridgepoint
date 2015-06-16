@@ -4,25 +4,18 @@ This work is licensed under the Creative Commons CC0 License
 
 ---
 
-# Title goes here
+# pyrsl as a replacement for gen_erate.exe
 ### xtUML Project Analysis Note
-
-
-Note: Each section has a description that states the purpose of that section.
-Delete these section descriptions before checking in your note.  Delete this
-note as well.
 
 1. Abstract
 -----------
-In this section, give a summary of the design that this note aims to
-describe.
+The bridgepoint toolchain currently rely on a windows-only interpreter called gen_erate.exe to execute RSL archetype files. To execute these parts of the tool chain on a non-windows machine, wine must be used. Rather than using wine, an experimental interpreter called pyrsl may be used instead.This note aims to investigate if pyrsl is feasable as a replacement to gen_erate.exe
 
 2. Document References
 ----------------------
 In this section, list all the documents that the reader may need to refer to.
 Give the full path to reference a file.
-[1] [BridgePoint DEI #1](https://support.onefact.net/redmine/issues/1)  
-[2] [BridgePoint DEI #2](https://support.onefact.net/redmine/issues/2) 
+[1] [pyrsl #1](https://github.com/john-tornblom/pyrsl)  
 
 3. Background
 -------------
