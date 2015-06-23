@@ -57,6 +57,8 @@ it sets out a brief analysis of the problem to be resolved by this design note.
 ----------------
 In this section, break out the consequential work (as a numbered list) needed
 to meet the requirements specified in the Requirements section.
+* add gen_erate to packing
+* update perl scripts which invoke gen_erate.exe using wine to point at gen_erate instead.
 
 7. Acceptance Test
 ------------------
