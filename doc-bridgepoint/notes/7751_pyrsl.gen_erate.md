@@ -51,11 +51,12 @@ Note: The current version of the python script [3] does not generate a makefile.
 
 6. Work Required
 ----------------
-Decide on which approach is most suitable:
+Decide on which approach is most suitable:  
+  
 6.1 Create a drop-in replacement for gen_erate.exe, and use the existing wrapper written in perl.
 * add gen_erate to packing
-* update perl scripts which invoke gen_erate.exe using wine to point at gen_erate instead.
-
+* update perl scripts which invoke gen_erate.exe using wine to point at gen_erate instead.  
+  
 6.2 Replace the perl-script with a python script
 * come up with a viable solution for windows users
 * come up with a good way for generating a makefile
