@@ -16,9 +16,9 @@ The bridgepoint toolchain currently rely on a windows-only interpreter called ge
 In this section, list all the documents that the reader may need to refer to.
 Give the full path to reference a file.
 
-- [1] [pyrsl github page](https://github.com/john-tornblom/pyrsl)  
-- [2] [self contained python version of gen_erate](https://github.com/john-tornblom/pyrsl/raw/bindist/gen_erate)
-- [3] [python-based replacement of the perl script xtumlmc_build](https://raw.githubusercontent.com/john-tornblom/mc/master/bin/mc3020.py)
+[1] [pyrsl github page](https://github.com/john-tornblom/pyrsl)  
+[2] [self contained python version of gen_erate](https://github.com/john-tornblom/pyrsl/raw/bindist/gen_erate)
+[3] [python-based replacement of the perl script xtumlmc_build](https://raw.githubusercontent.com/john-tornblom/mc/master/bin/mc3020.py)
 
 3. Background
 -------------
