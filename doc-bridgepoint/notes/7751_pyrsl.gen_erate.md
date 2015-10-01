@@ -17,7 +17,8 @@ In this section, list all the documents that the reader may need to refer to.
 Give the full path to reference a file.
 
 - [1] [pyrsl github page](https://github.com/john-tornblom/pyrsl)  
-- [2] [self contained python version of gen_erate](https://github.com/john-tornblom/pyrsl/raw/bindist/gen_erate)  
+- [2] [self contained python version of gen_erate](https://github.com/john-tornblom/pyrsl/raw/bindist/gen_erate)
+- [3] [python-based replacement of the perl script xtumlmc_build](https://raw.githubusercontent.com/john-tornblom/mc/master/bin/mc3020.py)
 
 3. Background
 -------------
@@ -36,34 +37,32 @@ Just like the apache license, GPL licensed software is provided without warranty
 
 4. Requirements
 ---------------
-This section describes the requirements that need to be satisfied.  If there 
-is an SRS, this section may simply refer to it.  Each requirement should be as 
-short and simple as possible and must be clearly defined.
-
-4.1 Item 1  
-4.2 Item 2  
-4.3 Item 3  
+Not sure about the requirements.
 
 5. Analysis
 -----------
-This section is only required if there is no preceding analysis note. If present
-it sets out a brief analysis of the problem to be resolved by this design note.
+The windows version of gen_erate is wrapped with a perl-script which modifies the sql-file generated from the prebuilder in various ways. For example:
+* remove the (') symbol from all phrases
+* change all uuid values to integer values
+* copy archetype files from the /sysc or /c folder into the project folder
 
-5.1 Item 1  
-5.2 Item 2  
-5.3 Item 3  
+With pyrsl, some of these modifications are unessecary, and some may done in a more robust way [3].
+Note: The current version of the python script [3] does not generate a makefile.
 
 6. Work Required
 ----------------
-In this section, break out the consequential work (as a numbered list) needed
-to meet the requirements specified in the Requirements section.
+Decide on which approach is most suitable:
+6.1 Create a drop-in replacement for gen_erate.exe, and use the existing wrapper written in perl.
 * add gen_erate to packing
 * update perl scripts which invoke gen_erate.exe using wine to point at gen_erate instead.
 
+6.2 Replace the perl-script with a python script
+* come up with a viable solution for windows users
+* come up with a good way for generating a makefile
+
 7. Acceptance Test
 ------------------
-In this section, list the tests that need to be performed in order to
-verify that all the requirements are satisfied.
+Not sure about the acceptance test.
 
 End
 ---
