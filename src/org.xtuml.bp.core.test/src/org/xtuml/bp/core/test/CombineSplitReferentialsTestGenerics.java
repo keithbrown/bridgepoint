@@ -103,11 +103,7 @@ public class CombineSplitReferentialsTestGenerics extends CanvasTest {
 		CanvasTestUtils.openCanvasEditor(uut);
 	}
 	
-<<<<<<< HEAD
 	public void testCombineSplitReferentialsTest(){
-=======
-	public void doTestCombineSplitReferentialsTest(){
->>>>>>> branch '7861_fix_mars' of https://github.com/keithbrown/bridgepoint.git
 		 doTestSelectNonReferentialAttribute();
 	      doTestClassWithOneReferentialAttribute();
 	      doTestReferentialAttributesWithDiffBaseTypes();
