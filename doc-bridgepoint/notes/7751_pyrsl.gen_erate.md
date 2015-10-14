@@ -9,35 +9,38 @@ This work is licensed under the Creative Commons CC0 License
 
 1. Abstract
 -----------
-The bridgepoint toolchain currently rely on a windows-only interpreter called gen_erate.exe to execute RSL archetype files. To execute these parts of the tool chain on a non-windows machine, wine must be used. Rather than using wine, an experimental interpreter called pyrsl [1] may be used instead.This note aims to investigate if pyrsl is feasable as a replacement to gen_erate.exe
+The BridgePoint toolchain currently rely on a windows-only interpreter called gen_erate.exe to execute RSL archetype files. To execute these parts of the tool chain on a non-windows machine, wine must be used. Rather than using wine, an experimental interpreter called pyrsl [1] may be used instead. This note aims to investigate if pyrsl is feasable as a replacement to gen_erate.exe.
 
 2. Document References
 ----------------------
-In this section, list all the documents that the reader may need to refer to.
-Give the full path to reference a file.
-
 [1] [pyrsl github page](https://github.com/john-tornblom/pyrsl)  
 [2] [self contained python version of gen_erate](https://github.com/john-tornblom/pyrsl/raw/bindist/gen_erate)  
-[3] [python-based replacement of the perl script xtumlmc_build](https://raw.githubusercontent.com/john-tornblom/mc/master/bin/mc3020.py)
+[3] [python-based replacement of the perl script xtumlmc_build](https://raw.githubusercontent.com/john-tornblom/mc/master/bin/mc3020.py)   
+[4] [BridgePoint DEI 7751](https://support.onefact.net/redmine/issues/7751)   
+[5] [GPL v3](http://www.gnu.org/licenses/gpl-3.0.en.html)   
+[6] [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)   
 
 3. Background
 -------------
-In its current condition, pyrsl behaves much like the original gen_erate.exe. A self-contained python-based version of gen_erate is availale for download [2] which uses a command line interface (CLI) with looks just like the original.
+In its current condition, pyrsl behaves much like the original gen_erate.exe. A self-contained python-based version of gen_erate is availale for download [2] which uses a command line interface (CLI) with looks just like the original.  
 
-An more modern CLI is also available, wich expose additional features not available in gen_erate.exe.  
+A more modern CLI is also available, which exposes additional features not available in gen_erate.exe:  
  **--include**    Similar to the gcc -I flag and the #include directive, pyrsl may search for a file is several places when using .include "filename". When the same filename is available in several paths, the one provided first on CLI will be used.  
  **--emit=WHEN**  choose when to emit a buffer to disk (never, when the files differ, always)  
  **--force**    make read-only emit files writable, i.e. chmod +w  
  **--diff=PATH**   generate a diff/patch between the text located on disk before every emit, and the emited text.
 
 #### 3.1 Licensing ####
-Like bash, pyrsl is licenced under the GPLv3. Unlike the apache 2 license with most of bridgepoint is licenced under, GPLv3 require any distributor to also distribute the source code. In addition, derived work must be made available to any reciever under the same licence as the orignal work. Of cource, source code which is interpreted by pyrsl (or bash) is not affected.
+Like bash, pyrsl is licenced under the GPLv3 [5]. Unlike the Apache 2 [6] license which most of BridgePoint is licenced under, GPLv3 requires any distributor to also distribute the source code. In addition, derived work must be made available to any reciever under the same licence as the orignal work. Of cource, source code which is interpreted by pyrsl (or bash) is not affected.
 
-Just like the apache license, GPL licensed software is provided without warranty and the software author/license owner cannot be held liable for damages.
+Just like the Apache license, GPL licensed software is provided without warranty and the software author/license owner cannot be held liable for damages.
 
 4. Requirements
 ---------------
-Not sure about the requirements.
+4.1  Given a project "X", the source code created by the Build Project action shall be identical when using the current gen_erate.exe and the pyrsl version of gen_erate.exe on both Windows and Linux.   
+4.2  The pyrsl version of gen_erate.exe shall handle all of the command line arguments that are handled by the current gen_erate.exe.   
+4.3  pyrsl memory usage shall be equal to or less than the memory usage of gen_erate.exe on Windows or Wine+gen_enerate.exe on Linux.   
+4.4  pyrsl execution time shall be equal to or less than the execution time of gen_erate.exe.   
 
 5. Analysis
 -----------
@@ -63,7 +66,8 @@ Decide on which approach is most suitable:
 
 7. Acceptance Test
 ------------------
-Not sure about the acceptance test.
+7.1  Create table to side-by-side compare memory and processing times for models.  Primarily use xtuml/models repo (GPS Watch, OOAofOOA, ex1) but also in-house models (with obfuscated names).   
+7.2  Create a build test to verify command line arguments.   
 
 End
 ---
