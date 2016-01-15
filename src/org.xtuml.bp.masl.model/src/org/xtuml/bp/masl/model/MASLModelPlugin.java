@@ -7,7 +7,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.xtuml.bp.core.util.CoreUtil;
 
 public class MASLModelPlugin extends AbstractUIPlugin {
 	private static MASLModelPlugin plugin;
@@ -49,12 +48,13 @@ public class MASLModelPlugin extends AbstractUIPlugin {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
+		/* TODO - figure out what to do and fix
 		if (!CoreUtil.IsRunningHeadless) {
 			super.start(context);
 			MASLModelPlugin.isActivated = true;
 		} else {
 			MASLModelPlugin.isActivated = false;
-		}
+		}*/
 	}
 
 	/* (non-Javadoc)
