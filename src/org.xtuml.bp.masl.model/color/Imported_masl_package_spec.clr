@@ -1,0 +1,17 @@
+.function get_package
+  .assign attr_location = "../org.xtuml.bp.masl.model/src/org/xtuml/bp/masl/model"
+  .assign attr_name = "org.xtuml.bp.masl.model"
+  .assign attr_application_root_class = "Imported_masl"
+  .assign attr_threading_model = "one_shot"
+  .assign attr_is_eclipse_plugin = true
+  .assign attr_db_driver = "org.postgresql.Driver"
+  .assign attr_db_name = "jdbc:postgresql:ooa2"
+  .assign attr_db_user = "campbell"
+  .assign attr_db_password = ""
+  .assign attr_ui_root_class_name = ""
+  .assign attr_ui_root_class_accessor = ""
+  .assign attr_is_root = false
+  .assign attr_plugin_classname = "MASLModelPlugin"
+  .assign attr_root_class = "Ooaofooa"
+  .assign attr_search_all_model_roots = false
+.end function
