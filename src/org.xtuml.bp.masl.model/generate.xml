@@ -44,7 +44,7 @@
   <property name="java.color.dep" value="Imported_masl_startspec.clr,Imported_masl_import_spec.clr,Imported_masl_package_spec.clr" />
   <property name="java.tj.dep" value="ooa_schema.sql,${java.arc.depends}" />
 
-  <property name="java.output" value="src/org/xtuml/bp/masl/model/Masl.java" />
+  <property name="java.output" value="src/org/xtuml/bp/masl/model/Imported_masl.java" />
 
   <target name="java.depends" >
     <uptodate property="java.buildNotNeeded" targetfile="${java.output}">
