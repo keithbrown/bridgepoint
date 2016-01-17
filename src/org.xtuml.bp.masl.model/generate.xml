@@ -71,7 +71,7 @@
     <touch file="${java.output}" />
   </target>
 				
-  <property name="handcraft_java_files" value="MASLModelPlugin.java" />
+  <property name="handcraft_java_files" value="MASLModelPlugin.java,Imported_maslBase.java" />
 
   <target name="format_java" description="Format the generated java source" >
     <taskdef name="PTCodeFormat" classname="PTCodeFormatterTask" >
