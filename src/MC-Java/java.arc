@@ -503,6 +503,11 @@ p_${an.body}\
 .include "${mc_archetypes}/block.inc"
 .include "${mc_archetypes}/referring.inc"
 .include "${mc_archetypes}/referred_to.inc"
+.include "${mc_archetypes}/q.imported_pkgs.inc"
+.include "${mc_archetypes}/q.rel.pseudoformalize.arc"
+.//
+.invoke connect_imported_pkgs()
+.invoke rel_pseudoformalize()
 .//
 .include "${mc_archetypes}/translate_oal.inc"
 .// - put in by wgt

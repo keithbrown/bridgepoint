@@ -251,7 +251,7 @@ get$cr{attribute.Name}\
 .end function
 .//
 .//====================================================================
-.//  This function returns the necessary generated unqiue key
+.//  This function returns the necessary generated unique key
 .//  used in an instance map
 .//====================================================================
 .function get_unique_instance_key_from_rto

@@ -261,7 +261,8 @@ ${cn.body} \
       .end if
 ${lvalue.buffer} = ${rvalue.buffer} ;
     .else
-.print "ERROR: Unhandled value type ${lvalue.Value_ID}"
+/*SKB Marker */${lvalue.buffer} = ${rvalue.buffer} ;
+.print "ERROR: Unhandled value type ${lvalue.Value_ID} - ${valueType.Name}"
     .end if
 .end function
 .//
