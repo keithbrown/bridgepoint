@@ -1,0 +1,54 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("e82e740d-ceb8-4d98-a639-ef6519400deb",
+	"00000000-0000-0000-0000-000000000000",
+	"8d932577-edcb-4403-8509-1415f027862c",
+	'imported_MC_EEs',
+	'MC_EEs',
+	0);
+INSERT INTO GD_MD
+	VALUES ("bcbf5f71-c092-41f6-ad06-56076b17a8ed",
+	112,
+	"e82e740d-ceb8-4d98-a639-ef6519400deb",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'org.xtuml.bp.masl.model::ooaofmasl::imported_MC_EEs');
+INSERT INTO DIM_DIA
+	VALUES ("bcbf5f71-c092-41f6-ad06-56076b17a8ed",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("e82e740d-ceb8-4d98-a639-ef6519400deb",
+	1,
+	"ac5460eb-4b00-42ef-92bf-09a1dcba441f",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("ac5460eb-4b00-42ef-92bf-09a1dcba441f",
+	"8d932577-edcb-4403-8509-1415f027862c",
+	"8d932577-edcb-4403-8509-1415f027862c",
+	'ooaofmasl',
+	'',
+	0,
+	'../ooaofmasl.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("8d932577-edcb-4403-8509-1415f027862c",
+	'org.xtuml.bp.masl.model',
+	1,
+	'../../org.xtuml.bp.masl.model.xtuml');

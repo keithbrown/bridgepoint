@@ -27,22 +27,22 @@ import org.xtuml.bp.core.common.NonRootModelElement;
 import org.xtuml.bp.core.common.TraceLogger;
 
 /**
- * Holds all the Java-only methods of Imported_masl.  All instances of this class
- * must also be instances of Imported_masl.  Externally, other classes
- * should only know about Imported_masl, and not this class.  Call
- * this class's thisAsImported_masl() method to cast an instance of 
- * this class to an Imported_masl.   
+ * Holds all the Java-only methods of Ooaofmasl.  All instances of this class
+ * must also be instances of Ooaofmasl.  Externally, other classes
+ * should only know about Ooaofmasl, and not this class.  Call
+ * this class's thisAsOoaofmasl() method to cast an instance of 
+ * this class to an Ooaofmasl.   
  */
-public class Imported_maslBase extends ModelRoot
+public class OoaofmaslBase extends ModelRoot
 {
     public static ILogger log = new TraceLogger("org.xtuml.bp.ui.canvas/debug");
 
-    protected static Map<String, Imported_maslBase> rootInstanceMap = new Hashtable<String, Imported_maslBase>();
+    protected static Map<String, OoaofmaslBase> rootInstanceMap = new Hashtable<String, OoaofmaslBase>();
 
     /**
      * Constructor 
      */
-    protected Imported_maslBase(String aRootId)
+    protected OoaofmaslBase(String aRootId)
     {
     	super(aRootId);
 
@@ -65,10 +65,10 @@ public class Imported_maslBase extends ModelRoot
     }
     
     /**
-     * Returns this instance of this class as an instance of Imported_masl,
+     * Returns this instance of this class as an instance of Ooaofmasl,
      * which it is required to also be.
      */
-    protected Imported_masl thisAsImported_masl() {return (Imported_masl)this;}
+    protected Ooaofmasl thisAsOoaofmasl() {return (Ooaofmasl)this;}
     
     public void delete() 
     {
@@ -88,10 +88,10 @@ public class Imported_maslBase extends ModelRoot
     /**
 	 * Returns an array of all the currently existing instances of this class.
 	 */
-	public static Imported_masl[] getInstances()
+	public static Ooaofmasl[] getInstances()
 	{
-		return (Imported_masl[])rootInstanceMap.values().toArray(
-				new Imported_masl[rootInstanceMap.size()]);
+		return (Ooaofmasl[])rootInstanceMap.values().toArray(
+				new Ooaofmasl[rootInstanceMap.size()]);
 	}
     
     /* (non-Javadoc)
@@ -116,12 +116,12 @@ public class Imported_maslBase extends ModelRoot
 		return ooaroot.persistEnabled();
 	}
 	
-	public static void addInstance(Imported_masl root) {
+	public static void addInstance(Ooaofmasl root) {
 		rootInstanceMap.put(root.getId(), root);
 	}
 	
-	public static Imported_masl findInstance(String id) {
-		return (Imported_masl) rootInstanceMap.get(id);
+	public static Ooaofmasl findInstance(String id) {
+		return (Ooaofmasl) rootInstanceMap.get(id);
 	}
 }
 
