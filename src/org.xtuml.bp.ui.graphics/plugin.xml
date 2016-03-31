@@ -209,34 +209,46 @@
             <dependsOn
                   class="org.xtuml.bp.core.ReferredToIdentifierAttribute_c">
             </dependsOn>
-			<autoReconcile
-			 Bridge_NumElements="Getsimpleassociationcount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsimpleassociationpartcount"
 			 
-			 Bridge_GetElementID="Getsimpleassociationid"
-			 targetSymbol="Association">
-			</autoReconcile>    
+			  Bridge_GetElementID="Getsimpleassociationpartid"
+			  targetSymbol="Association"/>
 			
-			<autoReconcile
-			 Bridge_NumElements="Getsupertypecount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsimpleassociationformcount"
 			 
-			 Bridge_GetElementID="Getsupertypeid"
-			 targetSymbol="Supertype">
-			</autoReconcile>    
+			  Bridge_GetElementID="Getsimpleassociationformid"
+			  targetSymbol="Association"/>
 			
-			<autoReconcile
-			 Bridge_NumElements="Getsubtypecount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsupertypecount"
 			 
-			 Bridge_GetElementID="Getsubtypeid"
-			 targetSymbol="Subtype">
-			</autoReconcile>    
+			  Bridge_GetElementID="Getsupertypeid"
+			  targetSymbol="Supertype"/>
 			
-			<autoReconcile
-			 Bridge_NumElements="Getassociativelinkcount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsubtypecount"
 			 
-			 Bridge_GetElementID="Getassociativelinkid"
-			 targetSymbol="Associative Link"
-			 sourceSymbol="Association">
-			</autoReconcile>   
+			  Bridge_GetElementID="Getsubtypeid"
+			  targetSymbol="Subtype"/>
+			
+		 <autoReconcile
+			  Bridge_NumElements="Getassociativelinkonecount"
+			 
+			  Bridge_GetElementID="Getassociativelinkoneid"
+			  targetSymbol="Association"/>
+
+		 <autoReconcile
+			  Bridge_NumElements="Getassociativelinkothercount"
+			 
+			  Bridge_GetElementID="Getassociativelinkotherid"
+			  targetSymbol="Association"/>
+		 <autoReconcile
+			  Bridge_NumElements="Getclassaslinkcount"
+			 
+			  Bridge_GetElementID="Getclassaslinkid"
+			  targetSymbol="Associative Link"/>
          </symbol>
          <symbol
                class="org.xtuml.bp.core.ImportedClass_c"
@@ -295,34 +307,49 @@
             <dependsOn
                   class="org.xtuml.bp.core.ReferredToIdentifierAttribute_c">
             </dependsOn>
-			<autoReconcile
-			 Bridge_NumElements="Getsimpleassociationcount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsimpleassociationpartcount"
 			 
-			 Bridge_GetElementID="Getsimpleassociationid"
-			 targetSymbol="Association">
-			</autoReconcile>    
+			  Bridge_GetElementID="Getsimpleassociationpartid"
+			  targetSymbol="Association"/>
 			
-			<autoReconcile
-			 Bridge_NumElements="Getsupertypecount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsimpleassociationformcount"
 			 
-			 Bridge_GetElementID="Getsupertypeid"
-			 targetSymbol="Supertype">
-			</autoReconcile>    
+			  Bridge_GetElementID="Getsimpleassociationformid"
+			  targetSymbol="Association"/>
 			
-			<autoReconcile
-			 Bridge_NumElements="Getsubtypecount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsupertypecount"
 			 
-			 Bridge_GetElementID="Getsubtypeid"
-			 targetSymbol="Subtype">
-			</autoReconcile>    
+			  Bridge_GetElementID="Getsupertypeid"
+			  targetSymbol="Supertype"/>
 			
-			<autoReconcile
-			 Bridge_NumElements="Getassociativelinkcount"
+		 <autoReconcile
+			  Bridge_NumElements="Getsubtypecount"
 			 
-			 Bridge_GetElementID="Getassociativelinkid"
-			 targetSymbol="Associative Link"
-			 sourceSymbol="Association">
-			</autoReconcile>    
+			  Bridge_GetElementID="Getsubtypeid"
+			  targetSymbol="Subtype"/>
+			
+		 <autoReconcile
+			  Bridge_NumElements="Getassociativelinkonecount"
+			 
+			  Bridge_GetElementID="Getassociativelinkoneid"
+			  targetSymbol="Association"
+			  sourceSymbol="Associative Link"/>
+			 
+		 <autoReconcile
+			  Bridge_NumElements="Getassociativelinkothercount"
+			 
+			  Bridge_GetElementID="Getassociativelinkotherid"
+			  targetSymbol="Associative Link"
+			  sourceSymbol="Association"/>
+			  
+		 <autoReconcile
+			  Bridge_NumElements="Getclassaslinkcount"
+			 
+			  Bridge_GetElementID="Getclassaslinkid"
+			  targetSymbol="Associative Link"/>
          </symbol>
          <symbol
                class="org.xtuml.bp.core.Association_c"
@@ -494,11 +521,13 @@
                   class="org.xtuml.bp.core.Action_c">
             </dependsOn>
 			<autoReconcile
-			 Bridge_NumElements="Gettransitioncount"
-			 
-			 Bridge_GetElementID="Gettransitionid"
-			 targetSymbol="Transition">
-			</autoReconcile>    
+			   targetSymbol="Transition"
+			    Bridge_NumElements="Gettransitionsourcecount"
+			    Bridge_GetElementID="Gettransitionsourceid"/>
+			<autoReconcile
+			   targetSymbol="Transition"
+			    Bridge_NumElements="Gettransitiondestinationcount"
+			    Bridge_GetElementID="Gettransitiondestinationid"/>
          </symbol>
          <symbol
                class="org.xtuml.bp.core.Transition_c"
@@ -2783,8 +2812,7 @@
             <autoReconcile
                targetSymbol="State"
                Bridge_NumElements="Getstatecount"
-               Bridge_GetElementID="Getstateid"
-               />   
+               Bridge_GetElementID="Getstateid"/>   
          </defaultFor>
       </editor>
       

@@ -1,4 +1,5 @@
 package org.xtuml.bp.ui.canvas;
+import java.lang.reflect.Field;
 //=====================================================================
 //
 //File:      $RCSfile: Cl_c.java,v $
@@ -42,8 +43,13 @@ import org.xtuml.bp.core.ActorParticipant_c;
 import org.xtuml.bp.core.Association_c;
 import org.xtuml.bp.core.AsynchronousMessage_c;
 import org.xtuml.bp.core.BinaryAssociation_c;
+import org.xtuml.bp.core.ClassAsAssociatedOneSide_c;
 import org.xtuml.bp.core.ClassAsLink_c;
+import org.xtuml.bp.core.ClassAsSimpleFormalizer_c;
+import org.xtuml.bp.core.ClassAsSimpleParticipant_c;
 import org.xtuml.bp.core.ClassAsSubtype_c;
+import org.xtuml.bp.core.ClassAsSupertype_c;
+import org.xtuml.bp.core.ClassInAssociation_c;
 import org.xtuml.bp.core.ClassInEngine_c;
 import org.xtuml.bp.core.ClassInState_c;
 import org.xtuml.bp.core.ClassInstanceParticipant_c;
@@ -65,6 +71,7 @@ import org.xtuml.bp.core.ExternalEntityParticipant_c;
 import org.xtuml.bp.core.ExternalEntity_c;
 import org.xtuml.bp.core.FlowFinalNode_c;
 import org.xtuml.bp.core.ForkJoinNode_c;
+import org.xtuml.bp.core.Gd_c;
 import org.xtuml.bp.core.Generalization_c;
 import org.xtuml.bp.core.ImportedClass_c;
 import org.xtuml.bp.core.ImportedProvision_c;
@@ -78,14 +85,20 @@ import org.xtuml.bp.core.Lifespan_c;
 import org.xtuml.bp.core.LinkedAssociation_c;
 import org.xtuml.bp.core.ModelClass_c;
 import org.xtuml.bp.core.Monitor_c;
+import org.xtuml.bp.core.NewStateTransition_c;
+import org.xtuml.bp.core.NoEventTransition_c;
 import org.xtuml.bp.core.ObjectNode_c;
 import org.xtuml.bp.core.Ooaofooa;
 import org.xtuml.bp.core.PackageParticipant_c;
 import org.xtuml.bp.core.Package_c;
 import org.xtuml.bp.core.Provision_c;
+import org.xtuml.bp.core.ReferredToClassInAssoc_c;
+import org.xtuml.bp.core.ReferringClassInAssoc_c;
 import org.xtuml.bp.core.Requirement_c;
 import org.xtuml.bp.core.ReturnMessage_c;
 import org.xtuml.bp.core.SendSignal_c;
+import org.xtuml.bp.core.SimpleAssociation_c;
+import org.xtuml.bp.core.StateEventMatrixEntry_c;
 import org.xtuml.bp.core.StateMachineState_c;
 import org.xtuml.bp.core.StateMachine_c;
 import org.xtuml.bp.core.StructuredDataType_c;
@@ -290,9 +303,18 @@ public class Cl_c {
         argTypes[0] = int.class;
         Object[] args = new Object[1];
         args[0] = new Integer(index);
+        
+        return uuid_invoke(From, Using, argTypes, args);
+    }
+    
+    public static Object Getelementinstance(final Object From, int index, final String Using) {
+        Class[] argTypes = new Class[1];
+        argTypes[0] = int.class;
+        Object[] args = new Object[1];
+        args[0] = new Integer(index);
     	
-    	return uuid_invoke(From, Using, argTypes, args);
-}
+    	return invoke(From, Using, argTypes, args);
+    }
     
     public static int Numconnectors(boolean elementTypesMatch,
     		                            final Object From, final String Using) {
@@ -300,7 +322,8 @@ public class Cl_c {
         argTypes[0] = boolean.class;
         Object[] args = new Object[1];
         args[0] = new Boolean(elementTypesMatch);
-    	return i_invoke(From, Using, argTypes, args);
+
+        return i_invoke(From, Using, argTypes, args);
     }
     public static int Numelements(final Object From, final String Using) {
         Class[] argTypes = null;
@@ -322,6 +345,30 @@ public class Cl_c {
 		return HierarchyUtil.Getpath(element);
 	}
 
+	public static Object Getooainstance(final UUID Ooa_id,
+            final Object rootElement) {
+		Class<Ooatype_c> ooaTypeClass = (Class<Ooatype_c>)Ooatype_c.class;
+		Field[] fields = ooaTypeClass.getDeclaredFields();
+		Object result = null;
+		for (int i = 0; i < fields.length;i++) {
+			String name = fields[i].getName();
+			if (!name.equalsIgnoreCase("OOA_UNINITIALIZED_ENUM")) {
+				Class cl = int.class;
+				int value = -1;
+				try {
+					value = (Integer)fields[i].get(cl);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					CanvasPlugin.logError("Failed to find value for OOA_Type="+name, null);
+				}
+				result = Getinstancefromooa_id(Ooa_id, value
+	                     , rootElement);
+				if (result != null) {
+					break;
+				}
+			}
+		}
+		return result;
+	}
 	public static Object Getinstancefromooa_id(
             SystemModel_c system,
             final UUID Ooa_id,
@@ -1581,6 +1628,9 @@ public class Cl_c {
     }
     return null;
   }
+  public static String Getmodelrootname(Object from) {
+	  return Cl_c.getModelRootname(from);
+  }
   //
   // invoke - invoke a method
   // result of invocation is used by caller
@@ -1978,4 +2028,70 @@ public static void Settoolbarstate(boolean readonly) {
         return s_invoke(represents, "Get_connector_tooltip", argTypes, args);
 	}
 
+	public static boolean Tracegraphicscreationisenabled() {
+		return CanvasPlugin.stringBufferLoggingIsEnabled();
+	}
+	
+	public static void Writetracelog(String filename) {
+		if (Tracegraphicscreationisenabled()) {
+			CanvasPlugin.writeTraceLog(filename);
+		}
+	}	
+	
+	// This function gets the name of any NonRootModelElement
+    public static String Getmodelelementname(final Object From) {
+    	return s_invoke(From, "getName", null, null);
+    }
+    
+    // This is really sort-of a hack around the ooag -> ooaofooa 
+    // interface for graphics reconciliation which is
+    // defined by GD_ARS. This is a special case for 
+    // reflexives
+    public static Boolean Isreflexive(final Object connectorInstance) {
+    	boolean isReflexive = false;
+    	if (connectorInstance instanceof Association_c) {
+    		Association_c assoc = (Association_c)connectorInstance;
+			ClassAsSimpleParticipant_c[] parts = ClassAsSimpleParticipant_c
+					.getManyR_PARTsOnR207(SimpleAssociation_c.getOneR_SIMPOnR206(assoc));
+			if (parts.length == 1) {
+				// check for formalized reflexive
+				ClassAsSimpleFormalizer_c form = ClassAsSimpleFormalizer_c
+						.getOneR_FORMOnR208(SimpleAssociation_c.getOneR_SIMPOnR206(assoc));
+				if (parts[0].getObj_id() ==form.getObj_id()) {
+					isReflexive = true;
+	  			}
+			} else if (parts.length > 1) {
+    			// check for unformalized reflexive
+    			if (parts[0].getObj_id() == parts[1].getObj_id()) {
+      			  isReflexive = true;
+    			}
+    		}
+    	} else if (connectorInstance instanceof Transition_c) {
+			Transition_c trans = (Transition_c) connectorInstance;
+			StateMachineState_c smsDest = StateMachineState_c.getOneSM_STATEOnR506(trans);
+			
+			StateMachineState_c smsSourceNoEventTrans = StateMachineState_c
+					.getOneSM_STATEOnR508(NoEventTransition_c.getOneSM_NETXNOnR507(trans));
+			
+			StateMachineState_c smsSourceNewStateTrans = StateMachineState_c.getOneSM_STATEOnR503(
+					StateEventMatrixEntry_c.getOneSM_SEMEOnR504(NewStateTransition_c.getOneSM_NSTXNOnR507(trans)));
+					
+    		if ((smsDest != null) && (smsDest == smsSourceNoEventTrans || smsDest == smsSourceNewStateTrans)) {
+    			isReflexive = true;
+    		}
+    	}
+    	return isReflexive;
+    }
+    
+    public static Boolean Isooalinkedassocinstance(final Object connectorInstance) {
+    	Boolean result = false;
+    	if (connectorInstance instanceof Association_c) {
+    		LinkedAssociation_c linkedAssoc = LinkedAssociation_c.getOneR_ASSOCOnR206((Association_c)connectorInstance);    		
+    		if (linkedAssoc != null) {
+    			result = true;
+    		}
+    	}
+    	return result;
+    }
+        
 }// End Cl_c
