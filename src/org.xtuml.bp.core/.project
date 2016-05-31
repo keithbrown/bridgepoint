@@ -6,15 +6,12 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>org.xtuml.bp.mc.java.source.export_builder</name>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<triggers>full,incremental,</triggers>
 			<arguments>
 				<dictionary>
-					<key>RootPackageName</key>
-					<value>ooaofooa</value>
-				</dictionary>
-				<dictionary>
-					<key>SplitAtPackage</key>
-					<value>Constants,Invocation,Use Case</value>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/org.xtuml.bp.mc.java.source.export_builder.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>

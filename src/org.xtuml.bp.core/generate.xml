@@ -167,17 +167,17 @@
           depends="java.depends"
           unless="java.buildNotNeeded" >
     <echo >Generating java files ...</echo>
-  	<!--<parallel>  -->
   <ant antfile="${mcj_path}/build.xml" target="generate-with-file_io.java" >
     <property name="param1" value="ooaofooa" />
     <property name="param2" value="Ooaofooa" />
     <property name="param3" value="${mcj_path}" />
     <property name="param4" value="" />
-    <property name="param5" value="Constants" />
+    <property name="param5" value="" />
     <property name="param6" value = "1"/>
     <property name="verify_selects" value="false" />
     <property name="mcjava.project.root" value="${basedir}"/>
   </ant>
+    <!-- TODO SKB - all in one file test
     <ant antfile="${mcj_path}/build.xml" target="generate-with-file_io.java" >
       <property name="param1" value="ooaofooa" />
       <property name="param2" value="Ooaofooa" />
@@ -207,7 +207,7 @@
       <property name="param6" value = "4"/>
       <property name="verify_selects" value="false" />
       <property name="mcjava.project.root" value="${basedir}"/>
-    </ant>
+    </ant> -->
   	<!--</parallel>-->
   <!-- Need to touch the output file for the case where the input data
        changed, but the output didn't -->
@@ -271,7 +271,7 @@
     <env key="XTUMLMC_HOME" value="${util_bin_dir}/../../" />
     <arg line="xtumlmc_gen_erate -nopersist
       -import ${mcj_path}/ooa_schema.sql
-      -d 0 -import sql/ooaofooa-4.sql
+      -d 0 -import sql/ooaofooa-1.sql
       -arch ${mcj_path}/verify_selects.arc
       -import sql/${cme_schema.output}
       -import sql/${cme_actions.input}
