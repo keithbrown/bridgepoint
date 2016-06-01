@@ -683,7 +683,15 @@ public class PersistableModelComponent implements Comparable {
     	if(!PersistenceManager.isPersistenceVersionAcceptable(this)) {
     		return;
     	}
-    	
+
+    	// Make sure the parent PMC is loaded before trying to load this PMC
+    	PersistableModelComponent parent_pmc = getParent();
+    	if ( null != parent_pmc ) {
+    		if ( reload || !parent_pmc.isLoaded() ) {
+    			parent_pmc.load(monitor, parseOal, reload);
+    		}
+    	}
+
         int oldStatus = status;
       try {
             status = STATUS_LOADING;    
