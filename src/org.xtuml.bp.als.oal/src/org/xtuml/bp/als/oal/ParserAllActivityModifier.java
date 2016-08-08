@@ -604,7 +604,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_provided_signals = act_set.toArray(new ProvidedSignal_c[act_set.size()]);
 			assert (m_provided_signals == pv_set.toArray(new ProvidedSignal_c[pv_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			ArrayList<RequiredSignal_c> rs_set = new ArrayList<RequiredSignal_c>();
 			ArrayList<NonRootModelElement> act_set = new ArrayList<NonRootModelElement>();
@@ -667,7 +666,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_provided_operations = act_set.toArray(new ProvidedOperation_c[act_set.size()]);
 			assert (m_provided_operations == po_set.toArray(new ProvidedOperation_c[po_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			ArrayList<RequiredOperation_c> ro_set = new ArrayList<RequiredOperation_c>();
 			ArrayList<NonRootModelElement> act_set = new ArrayList<NonRootModelElement>();
@@ -988,7 +986,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			assert (m_func_set == function_set.toArray(new Function_c[function_set.size()]));
 
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			ArrayList<Function_c> function_set = new ArrayList<Function_c>();
 			for (int i = 0; i < packages.length; i++) {
@@ -1085,7 +1082,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			assert (m_bridge_set == bridge_set.toArray(new Bridge_c[bridge_set.size()]));
 
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			ArrayList<Bridge_c> bridge_set = new ArrayList<Bridge_c>();
 			ArrayList<NonRootModelElement> act_set = new ArrayList<NonRootModelElement>();
@@ -1179,7 +1175,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_op_set = act_set.toArray(new Operation_c[act_set.size()]);
 			assert (m_op_set == op_set.toArray(new Operation_c[op_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			ArrayList<Operation_c> op_set = new ArrayList<Operation_c>();
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			for (int i = 0; i < packages.length; i++) {
@@ -1265,7 +1260,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_mda_set = act_set.toArray(new Attribute_c[act_set.size()]);
 			assert (m_mda_set == attr_set.toArray(new Attribute_c[attr_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			ArrayList<Attribute_c> attr_set = new ArrayList<Attribute_c>();
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			for (int i = 0; i < packages.length; i++) {
@@ -1355,7 +1349,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_ism_state_set = act_set.toArray(new StateMachineState_c[act_set.size()]);
 			assert (m_ism_state_set == state_set.toArray(new StateMachineState_c[state_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			ArrayList<StateMachineState_c> state_set = new ArrayList<StateMachineState_c>();
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			for (int i = 0; i < packages.length; i++) {
@@ -1391,7 +1384,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_csm_state_set = act_set.toArray(new StateMachineState_c[act_set.size()]);
 			assert (m_csm_state_set == state_set.toArray(new StateMachineState_c[state_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			ArrayList<StateMachineState_c> state_set = new ArrayList<StateMachineState_c>();
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			for (int i = 0; i < packages.length; i++) {
@@ -1501,7 +1493,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_ism_transitions = act_set.toArray(new Transition_c[act_set.size()]);
 			assert (m_ism_transitions == tran_set.toArray(new Transition_c[tran_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			ArrayList<Transition_c> tran_set = new ArrayList<Transition_c>();
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			for (int i = 0; i < packages.length; i++) {
@@ -1536,7 +1527,6 @@ public class ParserAllActivityModifier implements IAllActivityModifier {
 			m_csm_transitions = act_set.toArray(new Transition_c[act_set.size()]);
 			assert (m_csm_transitions == tran_set.toArray(new Transition_c[tran_set.size()]));
 		} else if (parseAll && m_sysMod != null) {
-			// isInGenericPackage == true
 			ArrayList<Transition_c> tran_set = new ArrayList<Transition_c>();
 			Package_c[] packages = Package_c.getManyEP_PKGsOnR1401(m_sysMod);
 			for (int i = 0; i < packages.length; i++) {

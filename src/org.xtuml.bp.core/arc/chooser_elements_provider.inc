@@ -57,36 +57,7 @@ public static ${cn.body}[] getElements(${contextClName.body} v_${firstContextIte
       Package_c pkg = Package_c.getOneEP_PKGOnR8000(pe);
       Component_c comp = Component_c.getOneC_COnR8003(pe);
       SystemModel_c sys = ((Ooaofooa)v_${firstContextItemName}.getModelRoot()).getRoot();
-	    .if(not cme.EnableVisibilityFiltering)
-	  boolean isInGenericPackage = ((pkg !=null) || (comp !=null));
-      if (!isInGenericPackage) {
-	    .end if
 	  .end if
-        Ooaofooa[] instancesUnderSystem = Ooaofooa.getInstancesUnderSystem(v_${firstContextItemName}.getModelRoot());
-        for(int i = 0; i < instancesUnderSystem.length; i++) {
-    	  ${cn.body}[] elementInstances = ${cn.body}.$r{class_name}Instances(instancesUnderSystem[i]);
-    	  for(int j = 0; j < elementInstances.length; j++) {
-		  	${cn.body} elem = elementInstances[j];
-    	    .// TODO: generate code from the second where clause
-			.invoke precondition = get_precondition(class.Key_Lett, cme.EnableVisibilityFiltering, elemClass.Key_Lett)
-			${precondition.preamble}
-    			  elementList.add(elem);
-			${precondition.postamble}
-    	  }
-        }
-		if (sys.getUseglobals()) {
-		  PackageableElement_c[] pes = PackageableElement_c.
-		             getManyPE_PEsOnR9100(GlobalElementInSystem_c.
-				                                     getManyG_EISsOnR9100(sys));
-          ${cn.body}[] elementInstances = ${cn.body}.getMany${class.Key_Lett}sOnR8001(pes);
-  	      for(int j = 0; j < elementInstances.length; j++) {
-		  	${cn.body} elem = elementInstances[j];
-			if (!elementList.contains(elem)) {
-			  // add elements once only
-    		  elementList.add(elem);
-		    }
-  	      }
-		}
       .if ((peTraversal != "") and (not cme.EnableVisibilityFiltering))
         .invoke typeName = get_ooa_type_name(class.Key_Lett)
 		.assign tn = typeName.result
@@ -96,8 +67,6 @@ public static ${cn.body}[] getElements(${contextClName.body} v_${firstContextIte
 		.else
 		  .assign globalEnable = "Pref_c.Getsystemboolean(BridgePointProjectReferencesPreferences.BP_PROJECT_CLASS_REFERENCES_ID, sys.getName())"
 		.end if
-	  }
-      else {
 	  	PackageableElement_c[] pes = null;
         if (pkg != null) {
           pkg.Clearscope();
@@ -141,11 +110,11 @@ public static ${cn.body}[] getElements(${contextClName.body} v_${firstContextIte
             elementList.add(elem);
 			${precondition.postamble}
         }
-      }
 	  .else
 		if (Pref_c.Getsystemboolean(
 				"com.mentor.nucleus.bp.ui.project.references", sys.getName()) == true) {
 			SystemModel_c[] systems = SystemModel_c.SystemModelInstances(Ooaofooa.getDefaultInstance());
+            Ooaofooa[] instancesUnderSystem = Ooaofooa.getInstancesUnderSystem(v_${firstContextItemName}.getModelRoot());
 			for (int i = 0; i < systems.length; i++) {
 				if (systems[i] != sys && systems[i].getUseglobals()) {
 					instancesUnderSystem = Ooaofooa.getInstancesUnderSystem(systems[i].getName());

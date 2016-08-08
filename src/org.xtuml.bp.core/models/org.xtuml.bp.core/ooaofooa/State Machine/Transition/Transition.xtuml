@@ -327,7 +327,6 @@ elif param.name == "signal"
       compId = package.getContainingComponentId();
       select any component from instances of C_C where (selected.Id == compId);
     end if;
-    isInGenericPackage = not_empty package or not_empty component;
     // if there is no containing component, then this action should be
     // filtered
     if(empty component)
