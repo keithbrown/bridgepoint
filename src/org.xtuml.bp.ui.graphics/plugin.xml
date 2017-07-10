@@ -625,7 +625,7 @@
                   class="org.xtuml.bp.core.SupplementalDataItems_c">
             </dependsOn>
          </symbol>
-         <symbol
+         <!--<symbol
                class="org.xtuml.bp.core.Exception_c"
                createMethod="Newexception"
                defaultHeight="150"
@@ -639,7 +639,7 @@
                   g="255"
                   r="255">
             </color>
-         </symbol>
+         </symbol>-->
          <symbol
                class="org.xtuml.bp.core.CoreDataType_c"
                defaultHeight="150"
@@ -871,7 +871,7 @@
                   class="org.xtuml.bp.core.Component_c">
             </dependsOn>
          </symbol>
-         <symbol
+         <!--<symbol
                antiAliased="true"
                class="org.xtuml.bp.core.ActorParticipant_c"
                createMethod="Newactor"
@@ -882,7 +882,7 @@
                icon="newactor.gif"
                name="Actor"
                symbolType="shape">
-         </symbol>
+         </symbol>-->
          <symbol
                class="org.xtuml.bp.core.Lifespan_c"
                createMethod="Newlifespan"
