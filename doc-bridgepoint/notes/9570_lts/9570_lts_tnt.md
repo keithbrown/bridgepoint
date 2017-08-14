@@ -77,11 +77,11 @@ development tools.  They receive important bug fixes or carefully selected compe
 ### 4.2 Ubuntu-like Time Based Approach
 The following BridgePoint LTS strategy draws inspiration from the Ubuntu LTS strategy [1].  
 
-**The BridgePoint development team will create a new major LTS version every two years.**  For example, 
+**Create a new major LTS version every two years.**  For example, 
 if an LTS version is created based on the code base of the BridgePoint Pro release in June 2017, 
-the next major LTS version shall be created around June 2019.  
+the next major LTS version would be created around June 2019.  
 
-**LTS versions shall live for 3 years.**  Continuing the example above, the June 2017 LTS will go 
+**LTS versions live for 3 years.**  Continuing the example above, the June 2017 LTS would go 
 out of support in June 2020.  This overlap gives LTS users plenty of time (one year) to migrate from 
 one LTS version to another.  
 
