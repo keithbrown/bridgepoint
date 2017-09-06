@@ -41,6 +41,9 @@ public class GraphicsCreationToolEntry extends ToolEntry {
 				GraphicsCreationTool.class);
 		setToolProperty(CreationTool.PROPERTY_CREATION_FACTORY, factory);
 		type = ooaType;
+		if ( label.equals("Actor") || label.equals("Exception")) {
+			setVisible(false);
+		}
 	}
 
 	@Override
