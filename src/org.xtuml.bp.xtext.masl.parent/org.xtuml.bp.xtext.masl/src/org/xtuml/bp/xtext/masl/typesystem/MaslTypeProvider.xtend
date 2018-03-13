@@ -340,7 +340,11 @@ class MaslTypeProvider {
 			TerminatorDefinition:
 				return new TerminatorType(feature)
 			LoopVariable:
-				return (feature.eContainer as ForStatement).expression.maslType.componentType
+			    if (feature.name === (feature.eContainer as ForStatement).variable.name) {
+			         return MISSING_TYPE
+			    } else {
+				    return (feature.eContainer as ForStatement).expression.maslType.componentType
+				}
 			Parameter:
 				return feature.type.maslTypeOfTypeReference
 			AttributeDefinition:
