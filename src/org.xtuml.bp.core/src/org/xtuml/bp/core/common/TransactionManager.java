@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -634,7 +635,28 @@ public class TransactionManager {
 				// schedule the job at the next possible time
 				transactionEndedJob.schedule();
 				try {
-					transactionEndedJob.join();
+					boolean completedWithoutTimeout = true;
+					completedWithoutTimeout = transactionEndedJob.join(120000, null);
+					if ( completedWithoutTimeout == false ) {
+						Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
+						for (Map.Entry<Thread, StackTraceElement[]> entry : threads.entrySet())
+						{
+							Thread t = entry.getKey();
+							String name = t.getName();
+						    Thread.State state = t.getState();
+						    int priority = t.getPriority();
+						    String type = t.isDaemon() ? "Daemon" : "Normal";
+						    System.out.printf("\n%-20s \t %s \t %d \t %s\n", name, state, priority, type);
+						    
+						    StackTraceElement[] stes = entry.getValue();
+						    for ( int i=0; i < stes.length; i++ ) {
+						    	StackTraceElement ste = stes[i];
+						    	System.out.println(ste.getClassName() + "(" + ste.getFileName() + ":" + ste.getLineNumber() + ")");
+						    }
+						}
+						
+						System.out.println("\n\nWARNING: an internal operation did not complete as expected.  Check for issues in the model data.\n ");
+					} 
 				} catch (InterruptedException e) {
 					CorePlugin.logError(
 							"Transaction job was interrupted unexpectedly", e);
