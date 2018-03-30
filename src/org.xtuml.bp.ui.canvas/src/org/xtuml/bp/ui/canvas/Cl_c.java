@@ -97,6 +97,7 @@ import org.xtuml.bp.core.ReferredToClassInAssoc_c;
 import org.xtuml.bp.core.ReferringClassInAssoc_c;
 import org.xtuml.bp.core.Requirement_c;
 import org.xtuml.bp.core.ReturnMessage_c;
+import org.xtuml.bp.core.Satisfaction_c;
 import org.xtuml.bp.core.SendSignal_c;
 import org.xtuml.bp.core.SimpleAssociation_c;
 import org.xtuml.bp.core.StateEventMatrixEntry_c;
@@ -277,6 +278,10 @@ public class Cl_c {
         }
           return result;
         }
+    public static boolean Disablecropping() {
+    	return CanvasPlugin.disableCropping;
+    }
+    
     public static int Getcompartments(final Object From) {
         return i_invoke(From, "Get_compartments", new Class[0], new Object[0]);
     }
@@ -1481,6 +1486,25 @@ public class Cl_c {
 	                    new Exception_Query_c());
             }
             return result;
+        } else if (Ooa_type == Ooatype_c.Satisfaction) {
+            Object result = modelRoot.getInstanceList(Satisfaction_c.class).get(
+                    Ooa_id);
+            if (result == null) {
+	            class Satisfaction_Query_c implements ClassQueryInterface_c {
+	                public boolean evaluate(Object candidate) {
+	                    if (((Satisfaction_c) candidate).Get_ooa_id().equals(
+	                            Ooa_id)) {
+	                        return true;
+	                    }
+	
+	                    return false;
+	                }
+	            }
+	
+	            result = Satisfaction_c.SatisfactionInstance(modelRoot,
+	                    new Satisfaction_Query_c());
+            }
+            return result;
         } else {
             return null;
         }
@@ -2079,22 +2103,7 @@ public static void Settoolbarstate(boolean readonly) {
     public static Boolean Isreflexive(final Object connectorInstance) {
     	boolean isReflexive = false;
     	if (connectorInstance instanceof Association_c) {
-    		Association_c assoc = (Association_c)connectorInstance;
-			ClassAsSimpleParticipant_c[] parts = ClassAsSimpleParticipant_c
-					.getManyR_PARTsOnR207(SimpleAssociation_c.getOneR_SIMPOnR206(assoc));
-			if (parts.length == 1) {
-				// check for formalized reflexive
-				ClassAsSimpleFormalizer_c form = ClassAsSimpleFormalizer_c
-						.getOneR_FORMOnR208(SimpleAssociation_c.getOneR_SIMPOnR206(assoc));
-				if (parts[0].getObj_id() ==form.getObj_id()) {
-					isReflexive = true;
-	  			}
-			} else if (parts.length > 1) {
-    			// check for unformalized reflexive
-    			if (parts[0].getObj_id() == parts[1].getObj_id()) {
-      			  isReflexive = true;
-    			}
-    		}
+    		return ((Association_c) connectorInstance).Is_reflexive();
     	} else if (connectorInstance instanceof Transition_c) {
 			Transition_c trans = (Transition_c) connectorInstance;
 			StateMachineState_c smsDest = StateMachineState_c.getOneSM_STATEOnR506(trans);
@@ -2151,5 +2160,51 @@ public static void Settoolbarstate(boolean readonly) {
 
 		return result;
 	}
-        
+	
+	/**
+	 * This routine was written for the case where the connector is 
+	 * directional. The only situation we have as of this time for directional 
+	 * connectors is transitions. This routine returns false by default and only returns 
+	 * true in the specific case where we are dealing with a transition and the connector
+	 * is the destination side of the transition.
+	 * 
+	 * @param shapeInstance
+	 * @param connectorInstance
+	 * @return
+	 */
+	public static Boolean Isdestination(final Object Connectorinstance, final Object Shapeinstance) {
+		Boolean isDestination = false;
+		if (Shapeinstance instanceof StateMachineState_c) {
+			if (Connectorinstance instanceof Transition_c) {
+				StateMachineState_c state  = (StateMachineState_c)Shapeinstance;
+				Transition_c transition = (Transition_c)Connectorinstance;
+				// If this is a creation transition, it is NOT a destination.
+				// The arrow on a creation transition may point to a shape, however,
+				// it is drawn starting from the shape and ending on whitespace.
+				CreationTransition_c crtx = CreationTransition_c.getOneSM_CRTXNOnR507(transition);
+				if (crtx == null) {
+					StateMachineState_c actualDestinationState = StateMachineState_c.getOneSM_STATEOnR506(transition);
+					if (state != null && actualDestinationState != null ) {
+						if (state.getSmstt_id() == actualDestinationState.getSmstt_id()) {
+							isDestination = true;
+						}				
+					}
+				}
+			}
+		}
+		
+		return isDestination;
+	}
+
+	public static Object Getprovisionfromsatisfaction(Object Satisfaction) {
+		Object result = null;
+		if (Satisfaction instanceof Satisfaction_c) {
+			result = ImportedProvision_c.getOneCL_IPOnR4705((Satisfaction_c)Satisfaction);
+			if (result == null) {
+				result = Provision_c.getOneC_POnR4002((Satisfaction_c)Satisfaction);				
+			}
+		}
+		return result;
+	}
+
 }// End Cl_c

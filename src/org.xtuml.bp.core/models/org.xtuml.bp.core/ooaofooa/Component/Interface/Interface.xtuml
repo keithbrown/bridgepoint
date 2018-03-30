@@ -28,7 +28,8 @@ end if;
 delete object instance self;',
 	1,
 	'',
-	"56b45cda-60fb-4e74-bcd2-fc12691b05e8");
+	"56b45cda-60fb-4e74-bcd2-fc12691b05e8",
+	0);
 INSERT INTO O_TFR
 	VALUES ("56b45cda-60fb-4e74-bcd2-fc12691b05e8",
 	"f021c5c6-f37d-4215-afe4-a3e777964197",
@@ -42,7 +43,8 @@ Translate: native',
 	'return this;',
 	0,
 	'',
-	"00000000-0000-0000-0000-000000000000");
+	"00000000-0000-0000-0000-000000000000",
+	0);
 INSERT INTO S_DT_PROXY
 	VALUES ("bc3722c8-5188-4529-8519-cf9eb9816b17",
 	"00000000-0000-0000-0000-000000000000",
@@ -95,7 +97,8 @@ end if;
 return result;',
 	1,
 	'',
-	"102501dd-88ec-4527-ab52-eaabbd3c7749");
+	"102501dd-88ec-4527-ab52-eaabbd3c7749",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("4aab5b27-bec7-475b-8d7d-dac2fbfc7075",
 	"73a6b126-7917-47ea-8fef-28f70e9bdce7",
@@ -148,7 +151,8 @@ else
 end if;',
 	1,
 	'',
-	"73a6b126-7917-47ea-8fef-28f70e9bdce7");
+	"73a6b126-7917-47ea-8fef-28f70e9bdce7",
+	0);
 INSERT INTO O_TFR
 	VALUES ("f3388d7d-6cda-459d-958c-c4ea67546916",
 	"f021c5c6-f37d-4215-afe4-a3e777964197",
@@ -172,7 +176,8 @@ end if;
 return 1;',
 	1,
 	'',
-	"7ee72375-f5c8-4fc8-83cb-a7acce29a7da");
+	"7ee72375-f5c8-4fc8-83cb-a7acce29a7da",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("74febb66-0af9-48e5-b060-cbad571ef7db",
 	"f3388d7d-6cda-459d-958c-c4ea67546916",
@@ -200,7 +205,8 @@ else
 end if;           ',
 	1,
 	'',
-	"7f3e321d-607b-4369-8030-11273bdae3c2");
+	"7f3e321d-607b-4369-8030-11273bdae3c2",
+	0);
 INSERT INTO O_TFR
 	VALUES ("530645c4-af1d-4cc6-9591-68b5103b3da6",
 	"f021c5c6-f37d-4215-afe4-a3e777964197",
@@ -211,7 +217,8 @@ INSERT INTO O_TFR
 	'return Style::Box;',
 	1,
 	'',
-	"1e65fdde-e216-42b1-9069-b128e2ba99a6");
+	"1e65fdde-e216-42b1-9069-b128e2ba99a6",
+	0);
 INSERT INTO S_DT_PROXY
 	VALUES ("6e636321-0fd1-4577-b185-e4d76b0d0c71",
 	"00000000-0000-0000-0000-000000000000",
@@ -231,7 +238,8 @@ INSERT INTO O_TFR
 	'return Style::None;',
 	1,
 	'',
-	"530645c4-af1d-4cc6-9591-68b5103b3da6");
+	"530645c4-af1d-4cc6-9591-68b5103b3da6",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("9e86ca42-e75e-49b1-b5e2-77f6239c9db8",
 	"3c1f5f62-34ad-4e92-b906-61cc66035c43",
@@ -281,7 +289,8 @@ end if;
 return signal.Id;',
 	1,
 	'',
-	"3ea48a0a-8577-4aea-bd7b-7747005454c4");
+	"3ea48a0a-8577-4aea-bd7b-7747005454c4",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("30bc3a88-0a69-4bee-98d7-ecf36fac2322",
 	"188e9d6f-eadb-4ff9-a923-d73664ff3a07",
@@ -337,7 +346,8 @@ return "";
 ',
 	1,
 	'',
-	"f3388d7d-6cda-459d-958c-c4ea67546916");
+	"f3388d7d-6cda-459d-958c-c4ea67546916",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("1c3f4a33-836f-408b-ac9f-7796a34df83e",
 	"c06ebec1-4f10-46cc-8b9d-86bdbc4bfa9c",
@@ -388,7 +398,8 @@ end while;
 return "";',
 	1,
 	'',
-	"c06ebec1-4f10-46cc-8b9d-86bdbc4bfa9c");
+	"c06ebec1-4f10-46cc-8b9d-86bdbc4bfa9c",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("b66aaeeb-fc94-477f-a94c-2c13079e0616",
 	"1e65fdde-e216-42b1-9069-b128e2ba99a6",
@@ -413,7 +424,8 @@ return not_empty op or not_empty sig;
 ',
 	1,
 	'',
-	"3c1f5f62-34ad-4e92-b906-61cc66035c43");
+	"3c1f5f62-34ad-4e92-b906-61cc66035c43",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("d06803a5-6130-4b22-aae5-ae4243049109",
 	"7f3e321d-607b-4369-8030-11273bdae3c2",
@@ -569,7 +581,8 @@ if (cardinality ioPeers > 1)
 end if;',
 	1,
 	'',
-	"678c416d-77aa-46fd-909d-c5687a36836b");
+	"678c416d-77aa-46fd-909d-c5687a36836b",
+	0);
 INSERT INTO O_TFR
 	VALUES ("39bc07cc-1dd1-466a-9867-75441bc61401",
 	"f021c5c6-f37d-4215-afe4-a3e777964197",
@@ -580,7 +593,8 @@ INSERT INTO O_TFR
 	'return self.Id;',
 	1,
 	'',
-	"188e9d6f-eadb-4ff9-a923-d73664ff3a07");
+	"188e9d6f-eadb-4ff9-a923-d73664ff3a07",
+	0);
 INSERT INTO O_TFR
 	VALUES ("d024f903-6559-4097-a5d3-14c889fe553f",
 	"f021c5c6-f37d-4215-afe4-a3e777964197",
@@ -604,7 +618,8 @@ if(not_empty iop)
 end if;',
 	1,
 	'',
-	"39bc07cc-1dd1-466a-9867-75441bc61401");
+	"39bc07cc-1dd1-466a-9867-75441bc61401",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("fea18f37-3309-418a-a63f-a4cd6327f42e",
 	"d024f903-6559-4097-a5d3-14c889fe553f",
@@ -639,7 +654,8 @@ end if;
 ',
 	1,
 	'',
-	"d024f903-6559-4097-a5d3-14c889fe553f");
+	"d024f903-6559-4097-a5d3-14c889fe553f",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("c892d661-65a9-4478-b964-9362d4b7924a",
 	"df4446ef-776d-48f5-9d19-cebf906415e8",
@@ -672,7 +688,8 @@ if(not_empty sig)
 end if;',
 	1,
 	'',
-	"df4446ef-776d-48f5-9d19-cebf906415e8");
+	"df4446ef-776d-48f5-9d19-cebf906415e8",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("293b6d9b-3e87-4097-b576-9c7e5afdbe80",
 	"02340862-a81d-42f8-96eb-a21e627342e0",
@@ -703,7 +720,8 @@ end for;
 ::changeNotificationEnablement(enabled:true);',
 	1,
 	'',
-	"02340862-a81d-42f8-96eb-a21e627342e0");
+	"02340862-a81d-42f8-96eb-a21e627342e0",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("6832b334-1dc3-4306-a2cd-ff7508ff7930",
 	"cd040bfe-d59b-4ad2-83e1-0d80e9d11a49",
@@ -738,7 +756,8 @@ select one component related by self->PE_PE[R8001]->C_C[R8003];
 return path;',
 	1,
 	'',
-	"cd040bfe-d59b-4ad2-83e1-0d80e9d11a49");
+	"cd040bfe-d59b-4ad2-83e1-0d80e9d11a49",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("165e0d2f-15b3-460f-83bb-ac00b9a281ae",
 	"c155c509-03e3-466c-aff2-589244cfb2c8",
@@ -777,7 +796,8 @@ if(param.syncType == SynchronizationType::Push)
 end if;',
 	1,
 	'',
-	"c155c509-03e3-466c-aff2-589244cfb2c8");
+	"c155c509-03e3-466c-aff2-589244cfb2c8",
+	0);
 INSERT INTO O_TPARM
 	VALUES ("c52ef492-b704-469f-8f23-f6334c5fc4cf",
 	"9d36ddbe-8916-41bc-8164-04af9f5ba9fc",
@@ -803,6 +823,202 @@ INSERT INTO S_DT_PROXY
 	'',
 	'',
 	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("041af5ee-823a-4764-bccf-d6d3d28a8672",
+	"f021c5c6-f37d-4215-afe4-a3e777964197",
+	'downgradeCheck',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// check types (return and param) on each op & signal
+select many c_eps related by self->C_EP[R4003];
+for each c_ep in c_eps
+  select many c_pps related by c_ep->C_PP[R4006];
+  for each c_pp in c_pps
+    c_pp.downgradeCheck();
+  end for;
+  select one c_io related by c_ep->C_IO[R4004];
+  if ( not_empty c_io )
+    c_io.downgradeCheck();
+  end if;
+end for;
+  
+//check interface references references that refer to self
+select many c_irs related by self->C_IR[R4012];
+for each c_ir in c_irs
+  c_ir.downgradeCheck();
+end for;',
+	1,
+	'',
+	"9d36ddbe-8916-41bc-8164-04af9f5ba9fc",
+	0);
+INSERT INTO O_TFR
+	VALUES ("111a8f19-e4c5-4489-9873-da1e35dfca54",
+	"f021c5c6-f37d-4215-afe4-a3e777964197",
+	'isCuttable',
+	'A shape type is cuttable if it is selected, and if each connector anchored to it is also selected.',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'return Sel::isSelected(element:self.convertToInstance());',
+	1,
+	'',
+	"041af5ee-823a-4764-bccf-d6d3d28a8672",
+	0);
+INSERT INTO O_TFR
+	VALUES ("cf75b2c0-67f0-4226-b7bb-e18787581879",
+	"f021c5c6-f37d-4215-afe4-a3e777964197",
+	'publishOperationFromFunction',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// For the given function create an operation 
+select any function from instances of S_SYNC where (selected.Sync_ID == param.syncID);
+if (not_empty function)
+  //
+  // We start by looking to see there are duplicate involved, and if we
+  // will be creating a new operation or updating an existing one.
+  //
+  
+  selectionHasDuplicates = false;
+  targetHasDuplicates = false;
+  updateExistingOperation = false;
+  if (Sel::numFunctionsSelected( functionName:function.Name) > 1)
+    selectionHasDuplicates = true;
+  end if;
+  select many existingOperations related by self->C_EP[R4003]->C_IO[R4004] where (selected.Name == function.Name);
+  if (cardinality existingOperations > 1)
+    targetHasDuplicates = true;
+  end if;
+  if (not selectionHasDuplicates and (cardinality existingOperations == 1))
+    updateExistingOperation = true;
+  end if;  
+
+  //
+  // Determine what the name of the operation being created/updated is
+  //
+  newName = function.Name;
+  if (not updateExistingOperation)
+    baseName=function.Name;
+    count=0;
+    newName = baseName;
+    // Determine a new name that will not be a duplicate
+    select any existingOp related by self->C_EP[R4003]->C_IO[R4004] where (selected.Name == newName);
+    while (not_empty existingOp)
+      count = count + 1;
+      newName = baseName + "_" + GD::int_to_string(value:count);
+      select any existingOp related by self->C_EP[R4003]->C_IO[R4004] where (selected.Name == newName);
+    end while;
+  end if;
+    
+  // 
+  // If there are duplicates involved tell the user, but proceed with the new name
+  //   
+  if (selectionHasDuplicates or targetHasDuplicates)
+    duplicateMsg = "";
+    if (targetHasDuplicates)
+      duplicateMsg = duplicateMsg + "There are multiple operations in the " + self.Name + " interface named " + function.Name + ".\n";
+    end if;
+    if (selectionHasDuplicates) 
+      duplicateMsg = duplicateMsg + "There are multiple functions in the selection named " + function.Name + ".\n";
+    end if;
+    duplicateMsg = duplicateMsg + "\nThis function will be published with the operation name " + newName + ".";
+    USER::information( msg:duplicateMsg, title: "Publish Operation From Function");
+  end if;
+  
+  //
+  // create the new operation if needed (it is created via the C_EP)
+  //
+  // See if this operation is overloaded. If it is, skip it.  (TODO: Keith thinks this is a bad comment)
+  epID = GD::NULL_UNIQUE_ID();
+  if (updateExistingOperation)
+    select any operationToUpdate related by self->C_EP[R4003.''is defined by'']->C_IO[R4004] where (selected.Name == function.Name);
+    select one ep related by operationToUpdate->C_EP[R4004];
+    epID = ep.Id;
+  else
+    epID = self.newExecutableProperty( asynchronous:false );
+  end if;
+  select any execProp from instances of C_EP where (selected.Id == epID);
+  select one iop related by execProp->C_IO[R4004];
+  iop.Name = newName;
+  iop.Descrip = function.Descrip;
+  iop.Return_Dimensions = function.Return_Dimensions;
+   
+  //  
+  // Now update the return type if it is different than the function''s return type
+  //
+  select one functionDT related by function->S_DT[R25.''has return type of''];
+  if(not_empty functionDT)
+    select one originalDT related by iop->S_DT[R4008];
+    // If the return type is different, update it
+    if(functionDT != originalDT)
+      unrelate iop from originalDT across R4008;
+      relate iop to functionDT across R4008;
+    end if;
+  end if;
+
+  //
+  // Now create the interface parameters from the function parameters.  Note that
+  // if we are updating an existing operation we delete all the existing 
+  // parameters first.   
+  //
+  
+  if (updateExistingOperation) 
+    // If we are updating an existing operation, then we 
+    // start by deleting all exisitng parameters
+    select many oip_params related by iop->C_EP[R4004]->C_PP[R4006.''is parameter to''];
+    for each oip_param in oip_params
+      oip_param.dispose();
+    end for;
+  end if;
+  
+  select many sparams related by function->S_SPARM[R24.''defines''];
+  for each sparam in sparams 
+    select one sparamDT related by sparam->S_DT[R26.''is typed by ''];
+  
+    iop.newParameter();
+    // The new paramater will be at the end of the list of parameters, 
+    // iterate over them to find the one with no "precedes" and that is the one
+    // we just created.  
+    select any newParam related by iop->C_EP[R4004]->C_PP[R4006.''is parameter to''];
+    select many params related by iop->C_EP[R4004]->C_PP[R4006.''is parameter to''];
+    for each pp in params
+      newParam = pp;
+      select one nextParam related by pp->C_PP[R4021.''precedes''];
+      if (empty nextParam)
+        break;
+      end if;
+    end for;
+    newParam.Descrip = sparam.Descrip;
+    newParam.Dimensions = sparam.Dimensions;     
+    newParam.Name = sparam.Name;
+
+    // Set the data type for the new param
+    select one newParamDefaultDataType related by newParam->S_DT[R4007];
+    if(newParamDefaultDataType != sparamDT)
+      unrelate newParam from newParamDefaultDataType across R4007;
+      relate newParam to sparamDT across R4007;
+    end if;
+  end for;    
+
+  // If a new operartion was created, hook-up 
+  // the operation that was just created to this interface
+  if (not updateExistingOperation)
+    self.pasteInterfaceOperation( id:iop.Id );
+  end if;
+end if;',
+	1,
+	'',
+	"111a8f19-e4c5-4489-9873-da1e35dfca54",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("1a6ba669-16cf-4099-8b9b-3970d955f499",
+	"cf75b2c0-67f0-4226-b7bb-e18787581879",
+	'syncID',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
 INSERT INTO O_NBATTR
 	VALUES ("7f16eece-6595-4e3d-be9a-4f17d2b638a3",
 	"f021c5c6-f37d-4215-afe4-a3e777964197");

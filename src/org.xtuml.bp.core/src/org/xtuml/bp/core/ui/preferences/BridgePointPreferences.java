@@ -47,7 +47,7 @@ public class BridgePointPreferences
     private Button showReferenceDeletionWarning;
     private Button showReferenceSynchronizationReport;
     private Button useDefaultNamesForNewModelElements;
-    private Button createGraphicsDuringImport;
+    private Button requireMaslStyleIdentifiers;
     private Button enableModelIntegrityCheck;
     
     protected IPreferenceModel model;
@@ -132,15 +132,16 @@ public class BridgePointPreferences
     useDefaultNamesForNewModelElements.setLayoutData(new GridData());
     useDefaultNamesForNewModelElements.setToolTipText("Shows the rename dialog automatically during new model element creation when not enabled.");
 
-    createGraphicsDuringImport = new Button(composite, SWT.CHECK | SWT.LEFT);
-    createGraphicsDuringImport.setText("Create graphics during import");
-    createGraphicsDuringImport.setLayoutData(new GridData());
-    createGraphicsDuringImport.setToolTipText("This option will reconcile model elements with their corresponding graphical elements during model import and will create and any missing graphical elements.");
+    requireMaslStyleIdentifiers = new Button(composite, SWT.CHECK | SWT.LEFT);
+    requireMaslStyleIdentifiers.setText("Enable restricted identifier naming for model elements");
+    requireMaslStyleIdentifiers.setLayoutData(new GridData());
+    requireMaslStyleIdentifiers.setToolTipText("This preference restricts element names to follow the BNF rule:\n  ( Letter | '_' )( Letter | Digit | '_' )*;\n\nIdentifiers may only contain letters, numbers, and underscores.  Spaces, hyphens, and other characters are not allowed.");
 
     enableModelIntegrityCheck = new Button(composite, SWT.CHECK | SWT.LEFT);
     enableModelIntegrityCheck.setText("Enable model integrity checks");
     enableModelIntegrityCheck.setLayoutData(new GridData());
     enableModelIntegrityCheck.setToolTipText(BridgePointPreferencesStore.EnableModelIntegrityToolTip);
+   
         
     model = new BridgePointPreferencesModel();
     model.getStore().loadModel(getPreferenceStore(), null, model);
@@ -186,7 +187,7 @@ public class BridgePointPreferences
         bpPrefs.showReferenceRemovalDialog = showReferenceDeletionWarning.getSelection();
         bpPrefs.showReferenceSyncReport = showReferenceSynchronizationReport.getSelection();
         bpPrefs.useDefaultNamesForNewModelElements = useDefaultNamesForNewModelElements.getSelection();
-        bpPrefs.createGraphicsDuringImport = createGraphicsDuringImport.getSelection();
+        bpPrefs.requireMaslStyleIdentifiers = requireMaslStyleIdentifiers.getSelection();
         bpPrefs.enableModelIntegrityCheck = enableModelIntegrityCheck.getSelection();
         model.getStore().saveModel(getPreferenceStore(), model);
         return true;
@@ -228,8 +229,8 @@ public class BridgePointPreferences
         showReferenceDeletionWarning.setSelection(bpPrefs.showReferenceRemovalDialog);
         showReferenceSynchronizationReport.setSelection(bpPrefs.showReferenceSyncReport);
         useDefaultNamesForNewModelElements.setSelection(bpPrefs.useDefaultNamesForNewModelElements);          
-        createGraphicsDuringImport.setSelection(bpPrefs.createGraphicsDuringImport);          
-        enableModelIntegrityCheck.setSelection(bpPrefs.enableModelIntegrityCheck);          
+        requireMaslStyleIdentifiers.setSelection(bpPrefs.requireMaslStyleIdentifiers);
+        enableModelIntegrityCheck.setSelection(bpPrefs.enableModelIntegrityCheck);  
     }
 
     public IPreferenceStore getPreferenceStore() {

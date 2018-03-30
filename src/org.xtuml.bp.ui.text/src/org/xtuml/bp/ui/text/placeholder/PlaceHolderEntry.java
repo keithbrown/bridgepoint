@@ -70,6 +70,8 @@ import org.xtuml.bp.ui.text.ModelElementID;
 import org.xtuml.bp.ui.text.TextPlugin;
 import org.xtuml.bp.ui.text.activity.ActivityEditorInputFactory;
 import org.xtuml.bp.ui.text.description.DescriptionEditorInputFactory;
+import org.xtuml.bp.ui.text.masl.MASLEditorInputFactory;
+import org.xtuml.bp.ui.text.typedefinition.TypeDefinitionEditorInputFactory;
 
 public class PlaceHolderEntry {
 	
@@ -240,7 +242,7 @@ public class PlaceHolderEntry {
 		if(existingFile.getLocation() == null && existingFile.getProject().exists()){
 			return null;
 		}
-
+		
 		return new PlaceHolderFileProxy(existingFile);
 	}
 	
@@ -330,20 +332,30 @@ public class PlaceHolderEntry {
 
 		private IModelElementEditorInputFactory getFactory(){
 			String fileExtension = getFileExtension();
-			if(fileExtension.equalsIgnoreCase(ActivityEditorInputFactory.PLACEHOLDER_EXTENSION)){
+			if(fileExtension.equalsIgnoreCase(MASLEditorInputFactory.PLACEHOLDER_EXTENSION)) {
+				return MASLEditorInputFactory.getDefaultInstance();
+			} else if(fileExtension.equalsIgnoreCase(ActivityEditorInputFactory.PLACEHOLDER_EXTENSION)){
 				return ActivityEditorInputFactory.getDefaultInstance();
-			}else if(fileExtension.equalsIgnoreCase(DescriptionEditorInputFactory.PLACEHOLDER_EXTENSION)){
+			} else if(fileExtension.equalsIgnoreCase(DescriptionEditorInputFactory.PLACEHOLDER_EXTENSION)){
 				return DescriptionEditorInputFactory.getDefaultInstance();
-			}else{
+			} else if(fileExtension.equalsIgnoreCase(TypeDefinitionEditorInputFactory.PLACEHOLDER_EXTENSION)){
+				return TypeDefinitionEditorInputFactory.getDefaultInstance();
+			} else {
 				throw new IllegalArgumentException("Unsupported file extension:" + fileExtension); //$NON-NLS-1$
 			}
 		}
 		
+		/**
+		 * This is where we create the physical file, 
+		 * orginalFile, that is the IFile instance held
+		 * inside the PlaceHolderFileProxy class.
+		 * 
+		 * @throws CoreException
+		 */
 		private void createOriginalFileIfNotPresent() throws CoreException{
 			if(!originalFile.exists()){
-								
 				getModelElementID().saveTo(originalFile);
-				originalFile.setDerived(true);
+				originalFile.setDerived(true, null);
 				originalFile.getResourceAttributes().setReadOnly(true);
 			}
 		}
@@ -506,7 +518,7 @@ public class PlaceHolderEntry {
     
                             // do the deletion
                             try {
-                    			originalFile.deleteMarkers(type, includeSubtypes, depth);
+                            	originalFile.deleteMarkers(type, includeSubtypes, depth);
                             } catch (CoreException e) {
                                 TextPlugin.logError("Could not delete problem markers for changed activity", e);
                             }
@@ -518,7 +530,8 @@ public class PlaceHolderEntry {
                 else {
                     // do the deletion right away
                     try {
-                        originalFile.deleteMarkers(type, includeSubtypes, depth);
+                    	// do not try to delete if the marker is already gone
+                    	originalFile.deleteMarkers(type, includeSubtypes, depth);
                     } catch (CoreException e) {
                         TextPlugin.logError("Could not delete problem markers for changed activity", e);
                     }

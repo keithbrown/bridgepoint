@@ -19,7 +19,8 @@ return evt.get_name();
 ',
 	1,
 	'',
-	"ddbcdaa9-37a5-4b35-a11d-7f9e96226d5f");
+	"ddbcdaa9-37a5-4b35-a11d-7f9e96226d5f",
+	0);
 INSERT INTO O_TFR
 	VALUES ("ddbcdaa9-37a5-4b35-a11d-7f9e96226d5f",
 	"8f39b160-16d1-419f-9067-069b2d461008",
@@ -42,7 +43,8 @@ delete object instance self;
 ',
 	1,
 	'',
-	"0d2bb15f-99d0-4848-8705-6564141d5e65");
+	"0d2bb15f-99d0-4848-8705-6564141d5e65",
+	0);
 INSERT INTO O_TFR
 	VALUES ("fd636efe-e7fc-4a86-83fa-5523da91d788",
 	"8f39b160-16d1-419f-9067-069b2d461008",
@@ -72,7 +74,8 @@ end if;
 ',
 	1,
 	'',
-	"00000000-0000-0000-0000-000000000000");
+	"00000000-0000-0000-0000-000000000000",
+	0);
 INSERT INTO O_TFR
 	VALUES ("505a3a64-fc3d-46c0-81c5-317cd5b226e5",
 	"8f39b160-16d1-419f-9067-069b2d461008",
@@ -98,7 +101,7 @@ if(not_empty poly and not Util::isProxy(element:self.convertToInstance()))
       select one superClass related by superSm->SM_ISM[R517]->O_OBJ[R518];
     end if;
     if(not_empty superClass)
-      if(not superClass.isSupertypeOf(classId:clazz.Obj_ID))
+      if(not (superClass.isSupertypeOf(classId:clazz.Obj_ID) or superClass.Obj_ID == clazz.Obj_ID))
         // the supertype was not resolved, the would indicate
         // that the supertype/subtype association was not fully
         // copied
@@ -193,7 +196,8 @@ if(not_empty poly and not Util::isProxy(element:self.convertToInstance()))
 end if;',
 	1,
 	'',
-	"a8cbc327-9736-4903-a1d2-904804621abf");
+	"a8cbc327-9736-4903-a1d2-904804621abf",
+	0);
 INSERT INTO O_TFR
 	VALUES ("0d2bb15f-99d0-4848-8705-6564141d5e65",
 	"8f39b160-16d1-419f-9067-069b2d461008",
@@ -204,7 +208,8 @@ INSERT INTO O_TFR
 	'return this;',
 	0,
 	'',
-	"fd636efe-e7fc-4a86-83fa-5523da91d788");
+	"fd636efe-e7fc-4a86-83fa-5523da91d788",
+	0);
 INSERT INTO S_DT_PROXY
 	VALUES ("bc3722c8-5188-4529-8519-cf9eb9816b17",
 	"00000000-0000-0000-0000-000000000000",
@@ -212,6 +217,37 @@ INSERT INTO S_DT_PROXY
 	'',
 	'',
 	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("e1cbf72c-aaee-4f58-b0a8-6c813f1a38c1",
+	"8f39b160-16d1-419f-9067-069b2d461008",
+	'hasNonLocalPoly',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one pevt related by self->SM_PEVT[R527];
+return pevt.SM_ID != self.SM_ID;',
+	1,
+	'',
+	"505a3a64-fc3d-46c0-81c5-317cd5b226e5",
+	0);
+INSERT INTO O_TFR
+	VALUES ("2319b2a1-8fe1-4a83-a7e8-3fabf22a524a",
+	"8f39b160-16d1-419f-9067-069b2d461008",
+	'canDelete',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'// do not allow deletion of non-local events when concrete polys are enabled
+select one system related by self->SM_SEVT[R526]->SM_EVT[R525]->SM_SM[R502]->SM_ISM[R517]->O_OBJ[R518]->PE_PE[R8001]->EP_PKG[R8000]->S_SYS[R1405];
+if ( not_empty system and PREF::getBoolean( name:"bridgepoint_prefs_allow_concrete_polys" ) )
+  return false;
+else
+  return true;
+end if;',
+	1,
+	'',
+	"e1cbf72c-aaee-4f58-b0a8-6c813f1a38c1",
+	0);
 INSERT INTO O_REF
 	VALUES ("8f39b160-16d1-419f-9067-069b2d461008",
 	"173a203b-677e-4e60-8aeb-678f4fd25f4b",
@@ -497,7 +533,8 @@ if(not_empty evt)
 else
   self.Name = ::getOrphanedElementName();
 end if;',
-	1);
+	1,
+	0);
 INSERT INTO O_BATTR
 	VALUES ("9e717c7c-561d-4009-a80b-96572647a9ab",
 	"8f39b160-16d1-419f-9067-069b2d461008");

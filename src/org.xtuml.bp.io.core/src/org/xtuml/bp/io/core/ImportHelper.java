@@ -1,12 +1,4 @@
 //=====================================================================
-//
-//File:      $RCSfile: ImportHelper.java,v $
-//Version:   $Revision: 1.83 $
-//Modified:  $Date: 2013/06/12 13:08:03 $
-//
-//(c) Copyright 2005-2014 by Mentor Graphics Corp. All rights reserved.
-//
-//=====================================================================
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not 
 // use this file except in compliance with the License.  You may obtain a copy 
 // of the License at
@@ -22,38 +14,21 @@
 
 package org.xtuml.bp.io.core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.xtuml.bp.core.ActionHome_c;
 import org.xtuml.bp.core.Action_c;
-import org.xtuml.bp.core.ActorParticipant_c;
+import org.xtuml.bp.core.Actiondialect_c;
 import org.xtuml.bp.core.AsynchronousMessage_c;
 import org.xtuml.bp.core.Attribute_c;
 import org.xtuml.bp.core.BridgeParameter_c;
@@ -65,6 +40,7 @@ import org.xtuml.bp.core.CorePlugin;
 import org.xtuml.bp.core.DataType_c;
 import org.xtuml.bp.core.Dimensions_c;
 import org.xtuml.bp.core.EclipseOoaofooa;
+import org.xtuml.bp.core.ElementVisibility_c;
 import org.xtuml.bp.core.Elementtypeconstants_c;
 import org.xtuml.bp.core.End_c;
 import org.xtuml.bp.core.EnumerationDataType_c;
@@ -80,15 +56,12 @@ import org.xtuml.bp.core.ImportedProvisionInSatisfaction_c;
 import org.xtuml.bp.core.ImportedProvision_c;
 import org.xtuml.bp.core.ImportedReference_c;
 import org.xtuml.bp.core.ImportedRequirement_c;
-import org.xtuml.bp.core.InteractionParticipant_c;
 import org.xtuml.bp.core.InterfaceOperation_c;
 import org.xtuml.bp.core.InterfaceReference_c;
 import org.xtuml.bp.core.Interface_c;
-import org.xtuml.bp.core.Lifespan_c;
 import org.xtuml.bp.core.Message_c;
 import org.xtuml.bp.core.ModelClass_c;
 import org.xtuml.bp.core.Modeleventnotification_c;
-import org.xtuml.bp.core.MooreActionHome_c;
 import org.xtuml.bp.core.Ooaofooa;
 import org.xtuml.bp.core.OperationParameter_c;
 import org.xtuml.bp.core.Operation_c;
@@ -97,6 +70,7 @@ import org.xtuml.bp.core.PackageableElement_c;
 import org.xtuml.bp.core.Parsestatus_c;
 import org.xtuml.bp.core.PortReference_c;
 import org.xtuml.bp.core.Port_c;
+import org.xtuml.bp.core.Pref_c;
 import org.xtuml.bp.core.PropertyParameter_c;
 import org.xtuml.bp.core.ProvidedExecutableProperty_c;
 import org.xtuml.bp.core.ProvidedOperation_c;
@@ -108,9 +82,9 @@ import org.xtuml.bp.core.RequiredSignal_c;
 import org.xtuml.bp.core.Requirement_c;
 import org.xtuml.bp.core.SatisfactionInComponent_c;
 import org.xtuml.bp.core.Satisfaction_c;
+import org.xtuml.bp.core.SearchResultSet_c;
 import org.xtuml.bp.core.StateMachineEventDataItem_c;
 import org.xtuml.bp.core.StateMachineEvent_c;
-import org.xtuml.bp.core.StateMachineState_c;
 import org.xtuml.bp.core.StateMachine_c;
 import org.xtuml.bp.core.StructureMember_c;
 import org.xtuml.bp.core.SupplementalDataItems_c;
@@ -120,27 +94,23 @@ import org.xtuml.bp.core.TimeSpan_c;
 import org.xtuml.bp.core.TimingMark_c;
 import org.xtuml.bp.core.TransitionActionHome_c;
 import org.xtuml.bp.core.Transition_c;
-import org.xtuml.bp.core.UseCaseAssociation_c;
 import org.xtuml.bp.core.UserDataType_c;
 import org.xtuml.bp.core.Visibility_c;
 import org.xtuml.bp.core.common.BaseModelDelta;
 import org.xtuml.bp.core.common.BridgePointPreferencesStore;
 import org.xtuml.bp.core.common.ClassQueryInterface_c;
-import org.xtuml.bp.core.common.ComponentResourceListener;
 import org.xtuml.bp.core.common.IdAssigner;
 import org.xtuml.bp.core.common.InstanceList;
 import org.xtuml.bp.core.common.ModelRoot;
 import org.xtuml.bp.core.common.NonRootModelElement;
-import org.xtuml.bp.core.common.PersistableModelComponent;
 import org.xtuml.bp.core.common.PersistenceManager;
-import org.xtuml.bp.core.inspector.IModelClassInspector;
-import org.xtuml.bp.core.inspector.ModelInspector;
+import org.xtuml.bp.core.ui.Selection;
 import org.xtuml.bp.core.ui.actions.GenericPackageAssignComponentOnCL_ICAction;
 import org.xtuml.bp.core.ui.actions.GenericPackageFormalizeOnC_PAction;
 import org.xtuml.bp.core.ui.actions.GenericPackageFormalizeOnC_RAction;
+import org.xtuml.bp.core.ui.actions.PullSynchronizationChanges;
 import org.xtuml.bp.core.util.TransactionUtil;
 import org.xtuml.bp.ui.canvas.AnchorOnSegment_c;
-import org.xtuml.bp.ui.canvas.CanvasTransactionListener;
 import org.xtuml.bp.ui.canvas.Cl_c;
 import org.xtuml.bp.ui.canvas.Connector_c;
 import org.xtuml.bp.ui.canvas.ContainingShape_c;
@@ -153,19 +123,14 @@ import org.xtuml.bp.ui.canvas.Graphconnector_c;
 import org.xtuml.bp.ui.canvas.Graphedge_c;
 import org.xtuml.bp.ui.canvas.Graphelement_c;
 import org.xtuml.bp.ui.canvas.GraphicalElement_c;
-import org.xtuml.bp.ui.canvas.GraphicsReconcilerLauncher;
 import org.xtuml.bp.ui.canvas.Graphnode_c;
 import org.xtuml.bp.ui.canvas.LineSegment_c;
-import org.xtuml.bp.ui.canvas.ModelSpecification_c;
 import org.xtuml.bp.ui.canvas.Model_c;
-import org.xtuml.bp.ui.canvas.Modeltype_c;
 import org.xtuml.bp.ui.canvas.NoncontainingShape_c;
 import org.xtuml.bp.ui.canvas.Ooaofgraphics;
 import org.xtuml.bp.ui.canvas.Shape_c;
 import org.xtuml.bp.ui.canvas.Waypoint_c;
 import org.xtuml.bp.ui.graphics.commands.CreateConnectionCommand;
-import org.xtuml.bp.ui.text.masl.MASLEditorInput;
-import org.xtuml.bp.ui.text.masl.MASLEditorInputFactory;
 
 /**
  * Holds Java-only methods that were previously specified as part of
@@ -336,276 +301,377 @@ public class ImportHelper
         return importer.getGraphicsModelRoot();
     }
 
+    // If a masl model was import then one of the following 2
+    // elements will not be null
+    private Package_c m_maslProjectImported = null;
+    private Package_c m_maslDomainsImported = null;
+    
+    
+    // m2x writes the following strings into description fields to flag that 
+    // is a masl model being imported.
+    private final String MASL_PROJECT = "masl_project";
+    private final String MASL_DOMAIN = "masl_domain";
+    private final String MASL_FORMALIZE = "masl_formalize";
+    private final String MASL_TEMPORARY_INTERFACE = "masl_temporary";
+    
     /**
-     * Resolve the MASL project by searching the workspace for components
-     * of the same name as the unassigned component references and assigning
-     * them.
+     * Resolve the MASL project
+     *   - Assign unassigned component references
+     *   - Unhook temporary interface definitions and re-attach to existing interfaces in domains
+     *   - create satisfactions
      */
-    public NonRootModelElement[] resolveMASLproject( NonRootModelElement[] elements ) {
-
-        LinkedList<NonRootModelElement> els = new LinkedList<NonRootModelElement>();
-        if ( elements == null ) return null;
-
-        for ( NonRootModelElement el : elements ) {
-            // add to list
-            els.add( el );
-
-            // process the unassigned component references
-            if ( el instanceof ComponentReference_c ) {
-		TransactionUtil.TransactionGroup transactionGroup = TransactionUtil.startTransactionsOnSelectedModelRoots("Resolve Component Reference");
-		Ooaofooa.beginSaveOperation();
-
-                ComponentReference_c cl_ic = (ComponentReference_c)el;
-
-                // get the name of the component we're looking for from the Descrip field
-            	String description = cl_ic.getDescrip();
-
-                // parse name
-                String cl_ic_name = "";
-                if ( !description.isEmpty() ) {
-                    Matcher m = Pattern.compile( "name:.*" ).matcher( description );
-                    if ( m.find() ) {
-                        cl_ic_name = m.group().substring(5);
-            	        cl_ic.setDescrip( m.replaceAll("") );
-                    }
-                }
-
-		// ensure that all Components are loaded
-		PersistenceManager.ensureAllInstancesLoaded(cl_ic.getModelRoot(), Component_c.class);
-                // get reachable components
-		Component_c[] components = GenericPackageAssignComponentOnCL_ICAction.getElements( cl_ic );
-
-                // match the ComponentReference with the Component
-                for ( Component_c c_c : components ) {
-                    if ( c_c.getName().equals( cl_ic_name ) ) {
-                        // assign the component reference to the component
-                        cl_ic.Assigntocomp( c_c.getId() );
-                        break;
-                    }
-                }
-
-		Ooaofooa.endSaveOperation();
-		TransactionUtil.endTransactions(transactionGroup);
-
-            }
-            else if ( el instanceof Requirement_c ) {
-		TransactionUtil.TransactionGroup transactionGroup = TransactionUtil.startTransactionsOnSelectedModelRoots("Resolve Required Interface");
-		Ooaofooa.beginSaveOperation();
-
-                // process the unformalized required interfaces
-                Requirement_c c_r = (Requirement_c)el;
-
-                // get the name of the interface we're looking for from the InformalName field
-                String c_r_name = c_r.getInformalname();
-
-		// ensure that all Interfaces are loaded
-		PersistenceManager.ensureAllInstancesLoaded(c_r.getModelRoot(), Interface_c.class);
-                // get reachable interfaces
-                Interface_c[] interfaces = GenericPackageFormalizeOnC_RAction.getElements( c_r );
-
-                // match the ComponentReference with the Component
-                for ( Interface_c c_i : interfaces ) {
-                    if ( c_i.getName().equals( c_r_name ) ) {
-                        // formalize the requirement
-                        c_r.Formalize(c_i.getId(), true);
-
-                        // get all the new instances
-                        RequiredOperation_c[] spr_ros = RequiredOperation_c.getManySPR_ROsOnR4502( RequiredExecutableProperty_c.getManySPR_REPsOnR4500( c_r ) );
-                        for ( RequiredOperation_c spr_ro : spr_ros ) {
-                            els.add( spr_ro );
-                        }
-                        break;
-                    }
-                }
-
-		Ooaofooa.endSaveOperation();
-		TransactionUtil.endTransactions(transactionGroup);
-            }
-            else if ( el instanceof Provision_c ) {
-		TransactionUtil.TransactionGroup transactionGroup = TransactionUtil.startTransactionsOnSelectedModelRoots("Resolve Provided Interface");
-		Ooaofooa.beginSaveOperation();
-
-                // process the unformalized provided interfaces
-                Provision_c c_p =  (Provision_c)el;
-
-                // get the name of the interface we're looking for from the InformalName field
-                String c_p_name = c_p.getInformalname();
-
-		// ensure that all Interfaces are loaded
-		PersistenceManager.ensureAllInstancesLoaded(c_p.getModelRoot(), Interface_c.class);
-                // get reachable interfaces
-                Interface_c[] interfaces = GenericPackageFormalizeOnC_PAction.getElements( c_p );
-
-                // match the ComponentReference with the Component
-                for ( Interface_c c_i : interfaces ) {
-                    if ( c_i.getName().equals( c_p_name ) ) {
-                        // formalize the requirement
-                        c_p.Formalize(c_i.getId(), true);
-
-                        // get all the new instances
-                        ProvidedOperation_c[] spr_pos = ProvidedOperation_c.getManySPR_POsOnR4503( ProvidedExecutableProperty_c.getManySPR_PEPsOnR4501( c_p ) );
-                        for ( ProvidedOperation_c spr_po : spr_pos ) {
-                            els.add( spr_po );
-                        }
-                        break;
-                    }
-                }
-
-                // copy the codeblock locations into the descrips of the new formalized provision
-                String description = c_p.getDescrip();
-
-                // parse codeblock mapping (op signature, filename)
-                if ( !description.isEmpty() ) {
-                    Matcher m = Pattern.compile( "routine:(.*),(codeblock:.*)" ).matcher( description );
-                    while ( m.find() ) {
-                        // select the specified routine
-                        ProvidedOperation_c spr_po = null;
-                        ProvidedExecutableProperty_c[] spr_peps = ProvidedExecutableProperty_c.getManySPR_PEPsOnR4501( c_p );
-                        for ( ProvidedExecutableProperty_c spr_pep : spr_peps ) {
-                            spr_po = ProvidedOperation_c.getOneSPR_POOnR4503( spr_pep );
-                            if ( spr_po != null ) {
-                                InterfaceOperation_c c_io = InterfaceOperation_c.getOneC_IOOnR4004(
-                                                            ExecutableProperty_c.getOneC_EPOnR4501(
-                                                            ProvidedExecutableProperty_c.getOneSPR_PEPOnR4503(spr_po)));
-                                if ( c_io.Getsignature(1).equals( m.group(1) ) ) break;
-                            }
-                        }
-
-                        // put the codeblock in the action semantics field
-                        if ( spr_po != null ) {
-                            spr_po.setAction_semantics_internal( m.group(2) );
-                        }
-                    }
-                    c_p.setDescrip( m.replaceAll("") );
-                }
-
-	        Ooaofooa.endSaveOperation();
-	        TransactionUtil.endTransactions(transactionGroup);
-
-            }
-
-        }
-
-        return els.toArray( new NonRootModelElement[0] );
-    }
-
-    /**
-     * Load the MASL activities into the BridgePoint model
-     */
-    public void loadMASLActivities( Ooaofooa modelRoot, IPath srcFileDir, NonRootModelElement[] elements ) {
-
+    public void resolveMASLproject( SystemModel_c system, NonRootModelElement[] elements ) {    	
         if ( elements == null ) return;
-
-        for ( NonRootModelElement el : elements ) {
-            //System.out.println( el.getClass().getName() );
-            //System.out.println( el.getRoot() );
-            //System.out.println( el.getPersistableComponent() );
-
-            // for each MASL activity object
-            if ( !( el instanceof Action_c ) && MASLEditorInput.isSupported( el ) ) {
-
-		TransactionUtil.TransactionGroup transactionGroup = TransactionUtil.startTransactionsOnSelectedModelRoots("Load MASL activity");
+        
+        boolean transaction_aborted = false;
+        Selection.getInstance().setSelection(new StructuredSelection(system));
+		TransactionUtil.TransactionGroup transactionGroup = TransactionUtil
+				.startTransactionsOnSelectedModelRoots("Import MASL");
 		Ooaofooa.beginSaveOperation();
-
-                // get Action_Semantics_internal field
-            	String action_semantics = "";
-                if ( el instanceof StateMachineState_c ) {
-                    // select one sm_act related by sm_state->SM_MOAH[R511]->SM_AH[R513]->SM_ACT[R514];
-                    StateMachineState_c sm_state = (StateMachineState_c)el;
-                    Action_c sm_act = Action_c.getOneSM_ACTOnR514( ActionHome_c.getOneSM_AHOnR513( MooreActionHome_c.getOneSM_MOAHOnR511( sm_state ) ) );
-                    if ( sm_act != null ) {
-                        action_semantics = sm_act.getAction_semantics_internal();
-                    }
-                }
-                else {
-                    try {
-                                            Method method = el.getClass().getMethod("getAction_semantics_internal", null);
-                                            action_semantics = (String)method.invoke((Object)el, null);
-                    } catch ( SecurityException e ) {
-                            System.out.println(e);
-                    } catch ( NoSuchMethodException e ) {
-                            System.out.println(e);
-                    } catch ( InvocationTargetException e ) {
-                            System.out.println(e);
-                    } catch (IllegalAccessException e) {
-                            System.out.println(e);
-                    }
-                }
-
-                // parse codeblock
-                String filename = "";
-                if ( !action_semantics.isEmpty() ) {
-                    Matcher m = Pattern.compile( "codeblock:.*" ).matcher( action_semantics );
-                    if ( m.find() ) {
-                        filename = m.group().substring(10);
-                        if ( el instanceof StateMachineState_c ) {
-                            // select one sm_act related by sm_state->SM_MOAH[R511]->SM_AH[R513]->SM_ACT[R514];
-                            StateMachineState_c sm_state = (StateMachineState_c)el;
-                            Action_c sm_act = Action_c.getOneSM_ACTOnR514( ActionHome_c.getOneSM_AHOnR513( MooreActionHome_c.getOneSM_MOAHOnR511( sm_state ) ) );
-                            if ( sm_act != null ) {
-                                sm_act.setAction_semantics_internal( m.replaceAll("") );
-                            }
-                        }
-                        else {
-                            try {
-                                Method method = el.getClass().getMethod( "setAction_semantics_internal", String.class );
-                                method.invoke((Object)el, m.replaceAll("") );
-                            } catch ( SecurityException e ) {
-                                    System.out.println(e);
-                            } catch ( NoSuchMethodException e ) {
-                                    System.out.println(e);
-                            } catch ( InvocationTargetException e ) {
-                                    System.out.println(e);
-                            } catch (IllegalAccessException e) {
-                                    System.out.println(e);
-                            }
-                        }
-                    }
-                }
-
-                // try to get MASL activity file
-                File mf = new File(srcFileDir.toOSString() + "/" + filename);
-                if ( !filename.isEmpty() && mf.exists() && mf.isFile() ) {
-
-                    // create file at right location
-                    IFile file;
-
-                    // get name
-                    String name = MASLEditorInputFactory.getFileNameForModelElement( el );
-
-                    // find the xtuml file path
-                    PersistableModelComponent pmc = el.getPersistableComponent();
-                    if ( pmc == null ) {
-                        pmc = PersistenceManager.findElementComponent(el, true);
-                    }
-                    IPath path = pmc.getFullPath();
-                    IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-                    IProject project = workspace.getProject( path.segment(0) );
-                    IFolder folder = project.getFolder( path.removeFirstSegments(1).removeLastSegments(1).toOSString() );
-                    file = folder.getFile( name + ".masl" );
-                    if ( !file.exists() ) {
-                        try {
-                                InputStream source = new FileInputStream(mf);
-                                file.create(source, IResource.NONE, null);
-                        } catch ( CoreException e ) {
-                                System.out.println(e);
-                        } catch ( FileNotFoundException e ) {
-                                System.out.println(e);
-                        }
-                    }
-
-                }
-                else if ( !filename.isEmpty() ) {
-                    System.out.println( "Could not find MASL activity file. filename: '" + srcFileDir.toOSString() + "/" + filename + "'" );
-                }
-
-	        Ooaofooa.endSaveOperation();
-	        TransactionUtil.endTransactions(transactionGroup);
-
-            }
-        }
+		try {
+	        // first pass, assign component references and swap interfaces, formalize interfaces
+	        for ( NonRootModelElement el : elements ) {
+	            if ( el instanceof ComponentReference_c ) {
+	            	resolveMASLComponentReference((ComponentReference_c)el);
+	            } else if ( el instanceof Interface_c ) {
+	            	resolveMASLTemporaryInterface((Interface_c)el);
+	            } else if ( el instanceof Requirement_c ) {
+	            	resolveMASLRequirement((Requirement_c)el);
+	            } else if ( el instanceof Provision_c ) {
+	            	resolveMASLProvision((Provision_c) el);
+	            } else if (m_maslProjectImported==null && m_maslDomainsImported==null && (el instanceof Package_c)) {
+	            	// If any package is marked as a masl project then
+	            	// set the flag indicating a masl model was imported
+	            	
+	        		String descrip = ((Package_c)el).getDescrip();
+	        		if (!descrip.isEmpty()) {
+	        			Matcher m = Pattern.compile(MASL_PROJECT).matcher(descrip);
+	        			if (m.find()) {
+	        				m_maslProjectImported = (Package_c)el;
+	        			} else {
+	            			m = Pattern.compile(MASL_DOMAIN).matcher(descrip);
+	            			if (m.find()) {
+	            				m_maslDomainsImported = (Package_c)el;
+	            			}
+	        			}
+	        		}
+	            }
+	        }
+	        
+	        if (m_maslProjectImported != null) {	        	
+	            // create satisfactions
+	            createMASLSatisfactions(elements);
+	        }
+		} catch (Exception e) {
+			// revert the transaction
+			CorePlugin.logError("Aborting the MASL import transaction", e);
+			transaction_aborted = true;
+			TransactionUtil.cancelTransactions(transactionGroup, e);
+		} finally {
+			Ooaofooa.endSaveOperation();
+			if (!transaction_aborted) {
+				TransactionUtil.endTransactions(transactionGroup);				
+			}
+		}
+        if (m_maslProjectImported != null) {	        	
+	    	// Create any missing port interface operations 
+	    	// MASL projects don't always declare all domain 
+	    	// terminator services in a MASL project.  Note that
+        	// this call should _not_ be moved up inside the 
+        	// transaction.  It needs to occur after all that 
+        	// work is done.
+	    	synchronizeWithMASLDomain(system);
+        }		
     }
 
+	// process an unformalized provided interface
+	private void resolveMASLProvision(Provision_c c_p) {
+		// check if requirement needs formalizing
+		boolean formalize = false;
+		String descrip = c_p.getDescrip();
+		if (!descrip.isEmpty()) {
+			Matcher m = Pattern.compile(MASL_FORMALIZE).matcher(descrip);
+			if (m.find()) {
+				formalize = true;
+			}
+		}
+
+		if (formalize) {
+
+			// get the name of the interface we're looking for from the
+			// InformalName field
+			String c_p_name = c_p.getInformalname();
+
+			// ensure that all Interfaces are loaded
+			PersistenceManager.ensureAllInstancesLoaded(c_p.getModelRoot(), Interface_c.class);
+			// get reachable interfaces
+			Interface_c[] interfaces = GenericPackageFormalizeOnC_PAction.getElements(c_p);
+
+			// match the Interface
+			for (Interface_c c_i : interfaces) {
+				if (c_i.getName().equals(c_p_name)) {
+					// formalize the requirement
+					c_p.Formalize(c_i.getId(), true);
+					// Set all the dialects to None to avoid persisting empty MASL bodies
+					ProvidedOperation_c[] spr_pos = ProvidedOperation_c.getManySPR_POsOnR4503(ProvidedExecutableProperty_c.getManySPR_PEPsOnR4501(c_p));
+					for ( ProvidedOperation_c spr_po : spr_pos ) {
+					    spr_po.setDialect(Actiondialect_c.none);	
+					}
+					ProvidedSignal_c[] spr_pss = ProvidedSignal_c.getManySPR_PSsOnR4503(ProvidedExecutableProperty_c.getManySPR_PEPsOnR4501(c_p));
+					for ( ProvidedSignal_c spr_ps : spr_pss ) {
+					    spr_ps.setDialect(Actiondialect_c.none);	
+					}
+					break;
+				}
+			}
+		}
+	}    
+    
+	// process an unformalized required interface
+	private void resolveMASLRequirement(Requirement_c c_r) {
+		// check if requirement needs formalizing
+		boolean formalize = false;
+		String descrip = c_r.getDescrip();
+		if (!descrip.isEmpty()) {
+			Matcher m = Pattern.compile(MASL_FORMALIZE).matcher(descrip);
+			if (m.find()) {
+				formalize = true;
+			}
+		}
+
+		if (formalize) {
+
+			// get the name of the interface we're looking for from the
+			// InformalName field
+			String c_r_name = c_r.getInformalname();
+
+			// ensure that all Interfaces are loaded
+			PersistenceManager.ensureAllInstancesLoaded(c_r.getModelRoot(), Interface_c.class);
+			// get reachable interfaces
+			Interface_c[] interfaces = GenericPackageFormalizeOnC_RAction.getElements(c_r);
+
+			// match the Interface
+			for (Interface_c c_i : interfaces) {
+				if (c_i.getName().equals(c_r_name)) {
+					// formalize the requirement
+					c_r.Formalize(c_i.getId(), true);
+					// Set all the dialects to None to avoid persisting empty MASL bodies
+					RequiredOperation_c[] spr_ros = RequiredOperation_c.getManySPR_ROsOnR4502(RequiredExecutableProperty_c.getManySPR_REPsOnR4500(c_r));
+					for ( RequiredOperation_c spr_ro : spr_ros ) {
+					    spr_ro.setDialect(Actiondialect_c.none);	
+					}
+					RequiredSignal_c[] spr_rss = RequiredSignal_c.getManySPR_RSsOnR4502(RequiredExecutableProperty_c.getManySPR_REPsOnR4500(c_r));
+					for ( RequiredSignal_c spr_rs : spr_rss ) {
+					    spr_rs.setDialect(Actiondialect_c.none);	
+					}
+					break;
+				}
+			}
+
+		}
+	}    
+    
+	/**
+	 * Create masl "temporary interfaces"
+	 * 
+	 * There are some action bodies coming from masl that are associated with a masl 
+	 * domain that we need to import into xtuml. We do this by creating an
+	 * interface to put these action bodies in. 
+	 * 
+	 * @param c_i
+	 */
+	private void resolveMASLTemporaryInterface(Interface_c c_i) {
+		// check if this is a temporary interface
+		String description = c_i.getDescrip();
+		boolean temporary_interface = true;
+		if (!description.isEmpty()) {
+			Matcher m = Pattern.compile(MASL_TEMPORARY_INTERFACE).matcher(description);
+			if (!m.find()) {
+				temporary_interface = false;
+			}
+		}
+
+		if (temporary_interface) {
+
+			// ensure that all Interfaces are loaded
+			PersistenceManager.ensureAllInstancesLoaded(c_i.getModelRoot(), Interface_c.class);
+
+			// get reachable Interfaces
+			Package_c pkg = Package_c.getOneEP_PKGOnR8000(PackageableElement_c.getOnePE_PEOnR8001(c_i));
+			List<Interface_c> elementList = new ArrayList<Interface_c>();
+			PackageableElement_c[] pes = null;
+			if (pkg != null) {
+				pkg.Clearscope();
+				pkg.Collectvisibleelementsforname(true, Gd_c.Null_unique_id(), false, "", pkg.getPackage_id(),
+						Elementtypeconstants_c.INTERFACE);
+				class PETest implements ClassQueryInterface_c {
+					public boolean evaluate(Object candidate) {
+						SearchResultSet_c selected = (SearchResultSet_c) candidate;
+						return (selected.getName().equals("")
+								&& selected.getType() == Elementtypeconstants_c.INTERFACE);
+					}
+				}
+				SearchResultSet_c results = SearchResultSet_c.getOnePE_SRSOnR8005(pkg, new PETest());
+				pes = PackageableElement_c.getManyPE_PEsOnR8002(ElementVisibility_c.getManyPE_VISsOnR8006(results));
+				for (int i = 0; pes != null && i < pes.length; i++) {
+					Interface_c elem = Interface_c.getOneC_IOnR8001(pes[i]);
+					elementList.add(elem);
+
+				}
+			}
+			Interface_c[] interfaces = elementList.toArray(new Interface_c[elementList.size()]);
+
+			// check for matching interfaces
+			for (int i = 0; i < interfaces.length; i++) {
+				// if name matches, but not the same interface
+				if (!interfaces[i].getId().equals(c_i.getId()) && interfaces[i].getName().equals(c_i.getName())) {
+					// select my interface reference
+					InterfaceReference_c c_ir = InterfaceReference_c.getOneC_IROnR4012(c_i);
+					if (null != c_ir) {
+						// replace the temporary interface
+						Ooaofooa.Replaceformalinterface(c_ir.getModelRoot(), c_ir.getId(), interfaces[i].getId());
+
+						// dispose self
+						c_i.Dispose();
+
+						// break from loop
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	// assign a masl component reference 
+	private void resolveMASLComponentReference(ComponentReference_c cl_ic) {
+		// check if containing package is a MASL project package
+		boolean masl_project = false;
+		Package_c pkg = Package_c.getOneEP_PKGOnR8000(PackageableElement_c.getOnePE_PEOnR8001(cl_ic));
+		if (null != pkg) {
+			String pkg_descrip = pkg.getDescrip();
+			if (!pkg_descrip.isEmpty()) {
+				Matcher m = Pattern.compile(MASL_PROJECT).matcher(pkg_descrip);
+				if (m.find()) {
+					masl_project = true;
+				}
+			}
+		}
+
+		if (masl_project) {
+
+			// get the name of the component we're looking for from the Descrip
+			// field
+			String description = cl_ic.getDescrip();
+
+			// parse name
+			String cl_ic_name = "";
+			if (!description.isEmpty()) {
+				Matcher m = Pattern.compile("name:.*").matcher(description);
+				if (m.find()) {
+					cl_ic_name = m.group().substring(5);
+					cl_ic.setDescrip(m.replaceAll(""));
+				}
+			}
+
+			// ensure that all Components are loaded
+			PersistenceManager.ensureAllInstancesLoaded(cl_ic.getModelRoot(), Component_c.class);
+			// get reachable components
+			Component_c[] components = GenericPackageAssignComponentOnCL_ICAction.getElements(cl_ic);
+
+			// match the ComponentReference with the Component
+			boolean wasAssigned = false;
+			for (Component_c c_c : components) {
+				if (c_c.getName().equals(cl_ic_name)) {
+					// assign the component reference to the component
+					cl_ic.Assigntocomp(c_c.getId());
+					wasAssigned = true;
+					break;
+				}
+			}
+			
+			// If a masl component reference was not found, warn the user 
+			// via a a console message
+			if (!wasAssigned && !cl_ic_name.isEmpty()) {
+				String msg = "The following Component Reference was not assigned: " + cl_ic_name;
+					msg += "\nThe domain was not found in the workspace.";
+					msg += "\nAssure that Interproject References are enabled and that the domain has been imported.";
+
+				CorePlugin.logError(msg, null);
+			}
+		}
+	}
+
+    public Package_c getImportedMASLDomainPackage() {
+    	return m_maslDomainsImported;
+    }
+    
+    public Package_c getImportedMASLProject() {
+    	return m_maslProjectImported;
+    }
+
+    /**
+     * @return true if either a masl domain package or a masl project
+     * package was imported. 
+     * 
+     * @return
+     */
+    public boolean maslModelWasImported() {
+    	return m_maslDomainsImported != null || m_maslProjectImported != null;
+    }
+
+    /**
+     * synchronize with the domain library to assure all domain 
+     * terminator services are represented as port operations in
+     * BridgePoint 
+     * @see issue https://support.onefact.net/issues/9316
+     */          
+	private void synchronizeWithMASLDomain(SystemModel_c system) {
+		// Set dialect to none while updating missing interfaces
+
+		int dialect = Pref_c.Getactiondialect(BridgePointPreferencesStore.DEFAULT_ACTION_LANGUAGE_DIALECT);
+		IPreferenceStore store = CorePlugin.getDefault().getPreferenceStore();
+
+		try {
+			// Set the dialect to none so the synchronized interfaces have
+			// Actiondialect_c.none as their dialect value
+			store.setValue(BridgePointPreferencesStore.DEFAULT_ACTION_LANGUAGE_DIALECT, Actiondialect_c.none); // $NON-NLS-1$
+			
+			// Synchronize with library to assure partial
+			// reference specifications are implemented
+			PullSynchronizationChanges sync = new PullSynchronizationChanges(false, system);
+			sync.run(null);
+		} finally {
+			// restore the dialect value
+			store.setValue(BridgePointPreferencesStore.DEFAULT_ACTION_LANGUAGE_DIALECT, dialect); // $NON-NLS-1$
+		}
+	}
+    
+    private void createMASLSatisfactions(NonRootModelElement[] nrmes) {    	
+		// Create satisfactions
+		for (NonRootModelElement nrme : nrmes) {
+			// process the unassigned component references
+			if (nrme instanceof Package_c) {
+
+				// check if containing package is a MASL project package
+				boolean masl_project = false;
+				Package_c pkg = (Package_c)nrme;
+				if (null != pkg) {
+					String pkg_descrip = pkg.getDescrip();
+					if (!pkg_descrip.isEmpty()) {
+						Matcher m = Pattern.compile("masl_project").matcher(pkg_descrip);
+						if (m.find()) {
+							masl_project = true;
+						}
+					}
+				}
+
+				if (masl_project) {
+					Ooaofooa.Autocreatemaslsatisfactions(pkg.getModelRoot(), pkg.getPackage_id());					
+				}
+			}
+		}
+    }
+    
     /**
      * Creates a model instance and initializes its values
      * to the given pre-BP-7.1-format parameters.
@@ -1644,17 +1710,6 @@ public class ImportHelper
     }
 
     /**
-     * Migrate the date (genType 1), timestamp (genType 2), and inst_ref<Timer> (genType 3)
-     * system level datatypes if their core types are not correct.
-     * 
-     * @parameter system An instance of the system model class
-     */
-    public void migrateSLDTs(SystemModel_c system)
-    {
-    	// TODO: BOB remove this
-    }    
-        
-    /**
      * Migrate the 1.5.1 dynamic arrays to 1.5.2 where both dynamic and fixed-
      * size arrays are supported.
      * 
@@ -2111,11 +2166,10 @@ public class ImportHelper
     }
 
     public void upgradeEventData(Ooaofooa modelRoot,
-                                                NonRootModelElement modelElem) {
-        StateMachine_c [] sms = StateMachine_c.
-                                  StateMachineInstances(modelRoot, null, false);
-        for (int i = 0; i < sms.length; i++) {
-          StateMachine_c sm = sms[i];
+                                                List<NonRootModelElement> modelElems) {
+        for ( NonRootModelElement modelElem : modelElems ) {
+          if ( modelElem instanceof StateMachine_c ) {
+          StateMachine_c sm = (StateMachine_c)modelElem;
           StateMachineEventDataItem_c [] smEvtDIs =
                          StateMachineEventDataItem_c.getManySM_EVTDIsOnR516(sm);
           StateMachineEvent_c unassignedDataEvent = null;
@@ -2198,65 +2252,60 @@ public class ImportHelper
             // of by the SM_SUPDT disposals.
             evSupData[j].Dispose();
           }
+        } // end if instanceof
         } // end for each state machine
     }
     
-    public void upgradeElementOrder(Ooaofooa modelRoot) {
-        // Owns C_AS and C_IO
-      InstanceList il = modelRoot.getInstanceList(Interface_c.class);
-        Interface_c[] intr = il.toArray(new Interface_c[0]);
-        for(int i = 0; i < intr.length; i++) {
-            intr[i].Initializeorder();
-        }
+    public void upgradeElementOrder( List<NonRootModelElement> modelElems ) {
+        for ( NonRootModelElement elem : modelElems ) {
+            if ( elem instanceof Interface_c ) {
+                // Owns C_AS and C_IO
+                Interface_c intr = (Interface_c)elem;
+                intr.Initializeorder();
+            }
 
-        // Owns C_PP
-        il = modelRoot.getInstanceList(ExecutableProperty_c.class);
-        ExecutableProperty_c[] exP = il.toArray(new ExecutableProperty_c[0]);
-        for(int i = 0; i < exP.length; i++) {
-            exP[i].Initializeorder();
-        }       
+            else if ( elem instanceof ExecutableProperty_c ) {
+                // Owns C_PP
+                ExecutableProperty_c exP = (ExecutableProperty_c)elem;
+                exP.Initializeorder();
+            }
         
-        // Owns O_TPARM
-    il = modelRoot.getInstanceList(Operation_c.class);
-    Operation_c[] op = il.toArray(new Operation_c[0]);
-        for(int i = 0; i < op.length; i++) {
-            op[i].Initializeorder();
-        }       
+            else if ( elem instanceof Operation_c ) {
+                // Owns O_TPARM
+                Operation_c op = (Operation_c)elem;
+                op.Initializeorder();
+            }
         
-        // Owns Operation
-    il = modelRoot.getInstanceList(ModelClass_c.class);
-    ModelClass_c[] mc = il.toArray(new ModelClass_c[0]);
-        for(int i = 0; i < mc.length; i++) {
-            mc[i].Initializeorder();
-        }       
+            else if ( elem instanceof ModelClass_c ) {
+                // Owns Operation
+                ModelClass_c mc = (ModelClass_c)elem;
+                mc.Initializeorder();
+            }
         
-        // Owns SM_EVTDI
-    il = modelRoot.getInstanceList(StateMachineEvent_c.class);
-        StateMachineEvent_c[] sme = il.toArray(new StateMachineEvent_c[0]);
-        for(int i = 0; i < sme.length; i++) {
-            sme[i].Initializeorder();
-        }       
+            else if ( elem instanceof StateMachineEvent_c ) {
+                // Owns SM_EVTDI
+                StateMachineEvent_c sme = (StateMachineEvent_c)elem;
+                sme.Initializeorder();
+            }
         
-        // Owns S_ENUM
-    il = modelRoot.getInstanceList(EnumerationDataType_c.class);
-    EnumerationDataType_c[] edt = il.toArray(new EnumerationDataType_c[0]);
-        for(int i = 0; i < edt.length; i++) {
-            edt[i].Initializeorder();
-        }       
+            else if ( elem instanceof EnumerationDataType_c ) {
+                // Owns S_ENUM
+                EnumerationDataType_c edt = (EnumerationDataType_c)elem;
+                edt.Initializeorder();
+            }
         
-        // Owns S_SPARM
-    il = modelRoot.getInstanceList(Function_c.class);
-    Function_c[] func = il.toArray(new Function_c[0]);
-        for(int i = 0; i < func.length; i++) {
-            func[i].Initializeorder();
-        }       
+            else if ( elem instanceof Function_c ) {
+                // Owns S_SPARM
+                Function_c func = (Function_c)elem;
+                func.Initializeorder();
+            }
         
-        // Owns S_BPARM
-    il = modelRoot.getInstanceList(Bridge_c.class);
-    Bridge_c[] brg = il.toArray(new Bridge_c[0]);
-        for(int i = 0; i < brg.length; i++) {
-            brg[i].Initializeorder();
-        }       
+            else if ( elem instanceof Bridge_c ) {
+                // Owns S_BPARM
+                Bridge_c brg = (Bridge_c)elem;
+                brg.Initializeorder();
+            }
+        }
     }
     
     public List<NonRootModelElement> upgradeDatatypes(List<NonRootModelElement> loadedInstances) {

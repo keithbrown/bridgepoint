@@ -17,12 +17,14 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IViewReference;
@@ -33,10 +35,12 @@ import org.eclipse.ui.intro.IIntroPart;
 import org.eclipse.ui.intro.IIntroSite;
 import org.eclipse.ui.intro.config.IIntroAction;
 import org.eclipse.ui.part.FileEditorInput;
-
+import org.osgi.service.prefs.Preferences;
 import org.xtuml.bp.core.CorePlugin;
 import org.xtuml.bp.core.Ooaofooa;
+import org.xtuml.bp.core.Pref_c;
 import org.xtuml.bp.core.SystemModel_c;
+import org.xtuml.bp.core.ui.preferences.BridgePointProjectPreferences;
 import org.xtuml.bp.core.util.UIUtil;
 import org.xtuml.bp.core.util.WorkspaceUtil;
 import org.xtuml.bp.utilities.ui.ProjectUtilities;
@@ -47,18 +51,21 @@ public class SampleProjectGettingStartedAction implements IIntroAction {
     public void run(IIntroSite site, Properties params) {
         String modelName = params.getProperty("model", "load_error");
         String singleFile = params.getProperty("SingleFileModel", "false");
+        String enableIPR = params.getProperty("enableIPR", "false");
+        String importIntoWorkspace = params.getProperty("ImportIntoWorkspace", "true");
+        String launchGettingStartedHelp = params.getProperty("LaunchGettingStartedHelp", "true");
         if (modelName.equals("load_error")) {
        		CorePlugin.logError(
                     "The SampleProjectGettingStartedAction could not determine the model requested.", null);
        		return;
         } else {
-        	setup(modelName, singleFile);
+        	setup(modelName, singleFile, enableIPR, importIntoWorkspace, launchGettingStartedHelp);
         }
     }
 
-	private void setup(String modelName, String singleFile) {
+	private void setup(String modelName, String singleFile, String enableIPR, String enableImportIntoWorkspace, String launchGettingStarted) {
 		// create project and all necessary parts
-		if ( setupProject(modelName, singleFile) ) {
+		if ( setupProject(modelName, singleFile, enableIPR, enableImportIntoWorkspace) ) {
 		    // show the xtUML Modeling perspective if not shown
 		    ProjectUtilities.openxtUMLPerspective();
 		    // close welcome page for the xtUML perspective
@@ -70,12 +77,14 @@ public class SampleProjectGettingStartedAction implements IIntroAction {
 		    	openReadme(modelName);
 		    }
 
-		    // Display the getting started help
-		    PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(IGettingStartedConstants.gpsGettingStartedLink);
+		    if (launchGettingStarted.equalsIgnoreCase("true")) {
+			    // Display the getting started help
+			    PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(IGettingStartedConstants.gpsGettingStartedLink);
+		    }
 		}
 	}
 
-	private boolean setupProject(String modelName, String singleFile) {
+	private boolean setupProject(String modelName, String singleFile, String enableIPR, String enableImportIntoWorkspace) {
         IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(modelName);
         boolean setupSucceeded = false;
         try {
@@ -113,21 +122,31 @@ public class SampleProjectGettingStartedAction implements IIntroAction {
 	            SystemModel_c systemModel = ProjectUtilities.getSystemModel(project);
 	            project.open(new NullProgressMonitor());
 	            project.refreshLocal(IResource.DEPTH_INFINITE, null);
-	
+
+	            if (enableIPR.compareToIgnoreCase("true") == 0) {
+	    			IScopeContext projectScope = new ProjectScope(project);
+	    			Preferences projectNode = projectScope.getNode(BridgePointProjectPreferences.BP_PROJECT_PREFERENCES_ID);
+	    			projectNode.putBoolean("com.mentor.nucleus.bp.ui.project.references", true);
+	            }
+	        
 	            modelPath = resolvePath(IGettingStartedConstants.modelFolder
 	                    + "/" + modelName + "." + Ooaofooa.MODELS_EXT); //$NON-NLS-1$ //$NON-NLS-2$
 	            if (!modelPath.isEmpty()) {
 	            	setupSucceeded = ProjectUtilities.importModelUsingWizard(systemModel, modelPath, false);
 	            }
             } else {
-            	if (singleFile.compareToIgnoreCase("false") != 0) {
+            	if (singleFile.compareToIgnoreCase("false") != 0 && enableImportIntoWorkspace.equalsIgnoreCase("true")) {
             		modelName += "." + singleFile;
             	}
-	            modelPath = resolvePath(IGettingStartedConstants.modelFolder
+            	if (enableImportIntoWorkspace.equalsIgnoreCase("true")) {
+            		modelPath = resolvePath(IGettingStartedConstants.modelFolder
 	                    + "/" + modelName); //$NON-NLS-1$
+            	} else {
+            		modelPath = singleFile;
+            	}
 
 	            if (!modelPath.isEmpty()) {
-	            	setupSucceeded = ProjectUtilities.importExistingProject(modelPath);
+	            	setupSucceeded = ProjectUtilities.importExistingProject(modelPath, enableImportIntoWorkspace.equalsIgnoreCase("true"));
 	            }
            	}
 

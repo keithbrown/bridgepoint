@@ -79,7 +79,7 @@ public class ExportBuilder extends AbstractExportBuilder {
 	// The eclipse infrastructure calls this function in response to
 	// direct request by the user for a build or because auto building
 	// is turned on.
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
+	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor)
 			throws CoreException {
 		setArgs(args);
 		return super.build(kind, args, monitor);
@@ -93,7 +93,7 @@ public class ExportBuilder extends AbstractExportBuilder {
 	 * 
 	 * @throws CoreException
 	 */
-	private void setArgs(Map<String, String> args) throws CoreException{
+	public void setArgs(Map<String, String> args) throws CoreException{
 		String statusMsg = "ExportBuilder::setArgs()\n";
 		
 		// This is used when the project bring built is not the same as the one being
@@ -138,9 +138,22 @@ public class ExportBuilder extends AbstractExportBuilder {
 		//System.out.println(statusMsg);
 	}
 	
+	@Override
+	public List<SystemModel_c> exportSystem(SystemModel_c system,
+			String destDir, final IProgressMonitor monitor, boolean append,
+			String originalSystem, boolean doNotParse) throws CoreException {
+		return exportSystem(system, destDir, monitor, append, originalSystem);
+	}
+	
 	public List<SystemModel_c> exportSystem(SystemModel_c system,
 			String destDir, final IProgressMonitor monitor, boolean append,
 			String originalSystem) throws CoreException {
+
+		boolean exportNeeded = readyBuildArea(monitor);
+		// if export is not needed do not perform this step
+		if(!exportNeeded) {
+			return new ArrayList<SystemModel_c>();
+		}
 
 		String errorMsg = "Unable to export to destination file.";
 		boolean exportSucceeded = false;
@@ -216,7 +229,7 @@ public class ExportBuilder extends AbstractExportBuilder {
 				if (!genFolder.exists()) {
 					genFolder.create(true, true, new NullProgressMonitor());
 				}
-				IFolder codeFolder = genFolder.getFolder(getCodeGenFolderPath()
+				IFolder codeFolder = genFolder.getFolder(getCodeGenFolderPath(proj)
 						.lastSegment());
 				if (!codeFolder.exists()) {
 					codeFolder.create(true, true, new NullProgressMonitor());

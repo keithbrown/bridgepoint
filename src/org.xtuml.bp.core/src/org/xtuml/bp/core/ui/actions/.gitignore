@@ -1,3 +1,4 @@
+AssignAsPackageReferenceOnEP_PKGAction.java
 SetType*.java
 SetReturnType*.java
 GenericPackageAssignComponentOnCL_ICAction.java
@@ -15,3 +16,4 @@ PackageParticipantFormalizeOnSQ_PPAction.java
 GenericPackageFormalizeOnC_DGAction.java
 GenericPackageFormalizeOnC_PAction.java
 GenericPackageFormalizeOnC_RAction.java
+PublishToInterfaceOnS_SYNCAction.java

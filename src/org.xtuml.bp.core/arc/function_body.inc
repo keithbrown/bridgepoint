@@ -206,7 +206,7 @@
     .if (usesTransactions)
 	TransactionUtil.TransactionGroup transactionGroup = 
 		TransactionUtil.startTransactionsOnSelectedModelRoots("${transaction_name.name}");
-        .if ((((((cme.Specialism == "Classes") or(cme.Specialism == "Components"))or ((cme.Specialism == "External")or(cme.Specialism == "Interaction")))or(((cme.Specialism == "New")or(cme.Specialism == "Activity"))or((cme.Specialism == "Types")or(cme.Specialism == "Usecase"))))or(cme.Specialism == "Exceptions"))and (cme.Resultant_Class_RelChain!=""))
+        .if ((((((cme.Specialism == "Classes") or(cme.Specialism == "Components"))or ((cme.Specialism == "External")or(cme.Specialism == "Interaction")))or(((cme.Specialism == "New")or(cme.Specialism == "Activity"))or((cme.Specialism == "Types")or(cme.Specialism == "Use Case"))))or(cme.Specialism == "Exceptions"))and (cme.Resultant_Class_RelChain!=""))
      boolean abortTransaction = false;
     .end if 
     try {
@@ -238,7 +238,7 @@ for(Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 }
 		.end if
 
- .if ((((((cme.Specialism == "Classes") or(cme.Specialism == "Components"))or ((cme.Specialism == "External")or(cme.Specialism == "Interaction")))or(((cme.Specialism == "New")or(cme.Specialism == "Activity"))or((cme.Specialism == "Types")or(cme.Specialism == "Usecase"))))or(cme.Specialism == "Exceptions"))and (cme.Resultant_Class_RelChain!=""))
+ .if ((((((cme.Specialism == "Classes") or(cme.Specialism == "Components"))or ((cme.Specialism == "External")or(cme.Specialism == "Interaction")))or(((cme.Specialism == "New")or(cme.Specialism == "Activity"))or((cme.Specialism == "Types")or(cme.Specialism == "Use Case"))))or(cme.Specialism == "Exceptions"))and (cme.Resultant_Class_RelChain!=""))
 	      .assign temp = "v_"+"${context_item.Name}" 
 		  .invoke rel_nav = backward_rel_chain_nav(cn.body,temp, cme.Resultant_Class_RelChain, "many", false);
       		NonRootModelElement[] children = ${rel_nav.body};
@@ -273,7 +273,7 @@ for(Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 		TransactionUtil.cancelTransactions(transactionGroup, e);
     	CorePlugin.logError("Transaction: ${transaction_name.name} failed", e);//$$NON-NLS-1$$
 	}
-     .if ((((((cme.Specialism == "Classes") or(cme.Specialism == "Components"))or ((cme.Specialism == "External")or(cme.Specialism == "Interaction")))or(((cme.Specialism == "New")or(cme.Specialism == "Activity"))or((cme.Specialism == "Types")or(cme.Specialism == "Usecase"))))or(cme.Specialism == "Exceptions"))and (cme.Resultant_Class_RelChain!=""))
+     .if ((((((cme.Specialism == "Classes") or(cme.Specialism == "Components"))or ((cme.Specialism == "External")or(cme.Specialism == "Interaction")))or(((cme.Specialism == "New")or(cme.Specialism == "Activity"))or((cme.Specialism == "Types")or(cme.Specialism == "Use Case"))))or(cme.Specialism == "Exceptions"))and (cme.Resultant_Class_RelChain!=""))
     	if((! CorePlugin.getDefault().getPreferenceStore().getBoolean(BridgePointPreferencesStore.USE_DEFAULT_NAME_FOR_CREATION)) &&abortTransaction)
 		{
 			TransactionUtil.cancelTransactions(transactionGroup);
@@ -371,6 +371,8 @@ for(Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
     .assign attr_result = "v_element"
   .elif (kl == "CL_IC")
     .assign attr_result = "v_element"
+  .elif (kl == "EP_PKG")
+    .assign attr_result = "v_element"
   .elif (kl == "SQ_COP")
 	.assign attr_result = "InteractionParticipant_c.getOneSQ_POnR930(v_element)"
   .elif (kl == "SQ_CP")
@@ -401,6 +403,8 @@ for(Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
     .assign attr_result = "          Component_c elem = Component_c.getOneC_COnR8001(pes[i]);"
   .elif (kl == "C_I")
     .assign attr_result = "          Interface_c elem = Interface_c.getOneC_IOnR8001(pes[i]);"
+  .elif (kl == "EP_PKG")
+    .assign attr_result = "          Package_c elem = Package_c.getOneEP_PKGOnR8001(pes[i]);"
   .end if
 .end function
 .function get_precondition
@@ -419,6 +423,9 @@ for(Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
     .elif (kl == "C_C")
       .assign attr_preamble = "          if (v_element.Canassigntocomp(elem.getId(), false)) {"
 	  .assign attr_postamble = "         }"
+	.elif (kl == "EP_PKG")
+	  .assign attr_preamble = "          if (v_element.Canassigntopackage(elem.getPackage_id())) {"
+	  .assign attr_postamble = "         }"
     .end if
   .end if
 .end function
@@ -433,5 +440,7 @@ for(Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
     .assign attr_result = "COMPONENT"
   .elif (kl == "C_I")
     .assign attr_result = "INTERFACE"
+  .elif (kl == "EP_PKG")
+    .assign attr_result = "PACKAGE"
   .end if
 .end function

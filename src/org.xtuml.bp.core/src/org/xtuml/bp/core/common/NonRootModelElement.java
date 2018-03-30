@@ -23,10 +23,14 @@
 package org.xtuml.bp.core.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.resources.IFile;
@@ -43,7 +47,9 @@ import org.xtuml.bp.core.CorePlugin;
 import org.xtuml.bp.core.DataType_c;
 import org.xtuml.bp.core.ElementVisibility_c;
 import org.xtuml.bp.core.Elementtypeconstants_c;
+import org.xtuml.bp.core.EnumerationDataType_c;
 import org.xtuml.bp.core.Gd_c;
+import org.xtuml.bp.core.InstanceReferenceDataType_c;
 import org.xtuml.bp.core.InstanceStateMachine_c;
 import org.xtuml.bp.core.IntegrityManager_c;
 import org.xtuml.bp.core.Ooaofooa;
@@ -52,6 +58,7 @@ import org.xtuml.bp.core.PackageableElement_c;
 import org.xtuml.bp.core.Pref_c;
 import org.xtuml.bp.core.SearchResultSet_c;
 import org.xtuml.bp.core.Severity_c;
+import org.xtuml.bp.core.StructuredDataType_c;
 import org.xtuml.bp.core.SystemModel_c;
 import org.xtuml.bp.core.UserDataType_c;
 import org.xtuml.bp.core.inspector.IModelClassInspector;
@@ -294,7 +301,12 @@ public abstract class NonRootModelElement extends ModelElement implements IAdapt
 
 	public String getPath() {
 		ModelInspector inspector = new ModelInspector();
-		String path = getName();
+		String path = "";
+		if ( !(this instanceof DataType_c) ) {
+			// If this is a datatype, the name will be handled by the subtype
+			// via the "parent" handling below.
+			path = getName();
+		}
 		if (this instanceof ClassStateMachine_c) {
 			path = "Class State Machine";
 		} else if (this instanceof InstanceStateMachine_c) {
@@ -311,7 +323,11 @@ public abstract class NonRootModelElement extends ModelElement implements IAdapt
 				} else if (parent instanceof InstanceStateMachine_c) {
 					path = "Instance State Machine" + "::" + path;
 				} else {
-					path = parent.getName() + "::" + path;
+					if ( path.isEmpty() ) {
+						path = parent.getName();	
+					} else {
+						path = parent.getName() + "::" + path;
+					}
 				}
 				parent = (NonRootModelElement) inspector.getParent(parent);
 			}
@@ -321,6 +337,116 @@ public abstract class NonRootModelElement extends ModelElement implements IAdapt
 		}
 		return path;
 	}
+    
+    /**
+     * Set union for model elements
+     */
+    public static <T extends NonRootModelElement> T[] setUnion( T a, T b, T[] emptyArray ) {
+        return setUnion( Collections.singleton( a ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setUnion( T a, T[] b, T[] emptyArray ) {
+        return setUnion( Collections.singleton(a), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setUnion( T[] a, T b, T[] emptyArray ) {
+        return setUnion( new HashSet<>( Arrays.asList( a ) ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setUnion( T[] a, T[] b, T[] emptyArray ) {
+        return setUnion( new HashSet<>( Arrays.asList( a ) ), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    private static <T extends NonRootModelElement> Set<T> setUnion( Set<T> a, Set<T> b ) {
+        Set<T> returnSet = new HashSet<>( a );
+        returnSet.addAll( b );
+        return returnSet;
+    }
+
+    /**
+     * Set intersection for model elements
+     */
+    public static <T extends NonRootModelElement> T[] setIntersection( T a, T b, T[] emptyArray ) {
+        return setIntersection( Collections.singleton( a ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setIntersection( T a, T[] b, T[] emptyArray ) {
+        return setIntersection( Collections.singleton(a), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setIntersection( T[] a, T b, T[] emptyArray ) {
+        return setIntersection( new HashSet<>( Arrays.asList( a ) ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setIntersection( T[] a, T[] b, T[] emptyArray ) {
+        return setIntersection( new HashSet<>( Arrays.asList( a ) ), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    private static <T extends NonRootModelElement> Set<T> setIntersection( Set<T> a, Set<T> b ) {
+        Set<T> returnSet = new HashSet<>( a );
+        returnSet.retainAll( b );
+        return returnSet;
+    }
+
+    /**
+     * Set difference for model elements
+     */
+    public static <T extends NonRootModelElement> T[] setDifference( T a, T b, T[] emptyArray ) {
+        return setDifference( Collections.singleton( a ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setDifference( T a, T[] b, T[] emptyArray ) {
+        return setDifference( Collections.singleton(a), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setDifference( T[] a, T b, T[] emptyArray ) {
+        return setDifference( new HashSet<>( Arrays.asList( a ) ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setDifference( T[] a, T[] b, T[] emptyArray ) {
+        return setDifference( new HashSet<>( Arrays.asList( a ) ), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    private static <T extends NonRootModelElement> Set<T> setDifference( Set<T> a, Set<T> b ) {
+        Set<T> returnSet = new HashSet<>( a );
+        returnSet.removeAll( b );
+        return returnSet;
+    }
+
+    /**
+     * Set symmetric difference for model elements
+     */
+    public static <T extends NonRootModelElement> T[] setSymmetricDifference( T a, T b, T[] emptyArray ) {
+        return setSymmetricDifference( Collections.singleton( a ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setSymmetricDifference( T a, T[] b, T[] emptyArray ) {
+        return setSymmetricDifference( Collections.singleton(a), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setSymmetricDifference( T[] a, T b, T[] emptyArray ) {
+        return setSymmetricDifference( new HashSet<>( Arrays.asList( a ) ), Collections.singleton( b ) ).toArray( emptyArray );
+    }
+
+    public static <T extends NonRootModelElement> T[] setSymmetricDifference( T[] a, T[] b, T[] emptyArray ) {
+        return setSymmetricDifference( new HashSet<>( Arrays.asList( a ) ), new HashSet<>( Arrays.asList( b ) ) ).toArray( emptyArray );
+    }
+
+    private static <T extends NonRootModelElement> Set<T> setSymmetricDifference( Set<T> a, Set<T> b ) {
+        Set<T> returnSet = setUnion( a, b );
+        returnSet.removeAll( setIntersection( a, b ) );
+        return returnSet;
+    }
+
+    /**
+     * Set compare equal for model elements
+     */
+    public static <T extends NonRootModelElement> boolean setEquals( T[] a, T[] b ) {
+    	if ( ( null == a || null == b ) || a.length != b.length ) return false;
+    	Set<T> setA = new HashSet<>( Arrays.asList( a ) );
+    	Set<T> setB = new HashSet<>( Arrays.asList( b ) );
+    	return ( setA.containsAll( setB ) && setB.containsAll( setA ) );
+    }
     
 	/**
      * Set the unique id for this instance.
@@ -421,6 +547,23 @@ public abstract class NonRootModelElement extends ModelElement implements IAdapt
         }
 	}
 
+	/**
+	 * Move this element from its current InstanceList to the 
+	 * list in the provided ModelRoot
+	 * 
+	 * @param destination
+	 */
+	public void move_unchecked(ModelRoot destination) {
+		InstanceList sourceInstanceList = getInstanceList();
+        synchronized (sourceInstanceList) {
+        	sourceInstanceList.remove(this);
+        }		
+        InstanceList destinationInstanceList = destination.getInstanceList(getClass());
+        synchronized (destinationInstanceList) {
+        	destinationInstanceList.add(this);
+        }		
+	}
+	
 	public ModelRoot getModelRoot() {
 		if(m_this_root == null)
 			return m_parent_root;
@@ -743,11 +886,11 @@ public abstract class NonRootModelElement extends ModelElement implements IAdapt
 		if (isProxy()
 				&& (!getModelRoot().getId().equals(
 						Ooaofooa.COMPARE_MODEL_ROOT_NAME) && !getModelRoot().isCompareRoot())) {
-            result = PersistenceManager.loadAndFinishComponent(m_contentPath);
-            }
-        return result;
-        }
-
+			result = PersistenceManager.loadAndFinishComponent(m_contentPath);
+		}
+		return result;
+    }
+    
     public void convertFromProxy() {
         if (isProxy()) {
             m_contentPath = null;
@@ -1018,4 +1161,31 @@ public abstract class NonRootModelElement extends ModelElement implements IAdapt
 		// do nothing, subtypes will override if necessary
 	}
 	
+	/**
+	 * Helper function to get the elements RTO. This is only implemented for datatypes right now.
+	 * 
+	 * @return RTO if there is one, or self if not
+	 */
+	public NonRootModelElement getRTOElementForResolution() {
+		if (this instanceof UserDataType_c) {
+			DataType_c dt = DataType_c
+					.getOneS_DTOnR17((UserDataType_c) this);
+			return dt;
+		} else if (this instanceof StructuredDataType_c) {
+			DataType_c dt = DataType_c
+					.getOneS_DTOnR17((StructuredDataType_c) this);
+			return dt;
+		} else if (this instanceof EnumerationDataType_c) {
+			DataType_c dt = DataType_c
+					.getOneS_DTOnR17((EnumerationDataType_c) this);
+			return dt;
+		} else if (this instanceof InstanceReferenceDataType_c) {
+			DataType_c dt = DataType_c
+					.getOneS_DTOnR17((InstanceReferenceDataType_c) this);
+			return dt;
+		} else {
+			return this;
+		}
+	}
+
 }

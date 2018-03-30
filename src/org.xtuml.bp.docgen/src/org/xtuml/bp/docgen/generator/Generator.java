@@ -1,10 +1,6 @@
 //====================================================================
 //
-// File:      $RCSfile: Generator.java,v $
-// Version:   $Revision: 1.23 $
-// Modified:  $Date: 2013/01/10 23:43:41 $
-//
-// (c) Copyright 2004-2014 by Mentor Graphics Corp.  All rights reserved.
+// File:      Generator.java
 //
 //====================================================================
 package org.xtuml.bp.docgen.generator;
@@ -45,7 +41,6 @@ import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.part.FileEditorInput;
-
 import org.xtuml.bp.core.CorePlugin;
 import org.xtuml.bp.core.SystemModel_c;
 import org.xtuml.bp.core.common.PersistableModelComponent;
@@ -63,7 +58,8 @@ public class Generator extends Task {
     public static final String IMAGE_DIR = "images/"; //$NON-NLS-1$
     public static final String DOCGEN_DIR = "/tools/docgen/"; //$NON-NLS-1$
     public static final String DOCGEN_EXE = "docgen"; //$NON-NLS-1$
-    public static final String XSLTPROC_EXE = "docbook/xsltproc"; //$NON-NLS-1$
+    public static final String DOCBOOK_DIR = "docbook/"; //$NON-NLS-1$
+    public static final String XSLTPROC_EXE = "xsltproc"; //$NON-NLS-1$
     public static final String XHTMLFILES = DOCGEN_DIR + "docbook/docbook-xsl-1.75.1/xhtml/"; //$NON-NLS-1$
     public static final String DOC_DIR = "doc/"; //$NON-NLS-1$
     public static final String DOCGEN_INPUT = "a.xtuml"; //$NON-NLS-1$
@@ -71,11 +67,13 @@ public class Generator extends Task {
     public static final String DOC_XML = "doc.xml"; //$NON-NLS-1$
     public static final String DOCGEN_XSL = "docgen.xsl"; //$NON-NLS-1$
     public static final String CSSFILE = ".css"; //$NON-NLS-1$
+    public static final String EXEFILE = ".exe"; //$NON-NLS-1$
     public static final String CONSOLE_NAME = "Console"; //$NON-NLS-1$
     private static final String ACTIVITY_ICON = "Activity.gif"; //$NON-NLS-1$
     private static final int SLEEPTIME = 500;
     private static final int KILLTIMEOUT = 20000;
 
+    private static String homedir = "";
     public static MessageConsole myConsole;
     public static MessageConsoleStream msgbuf;
     public static Generator self;
@@ -83,6 +81,8 @@ public class Generator extends Task {
     public Generator() {
         myConsole = findConsole(CONSOLE_NAME);
         msgbuf = myConsole.newMessageStream();
+        homedir = System.getProperty("eclipse.home.location"); //$NON-NLS-1$
+        homedir = homedir.replaceFirst("file:", ""); //$NON-NLS-1$
     }
     
     public static void genAll(SystemModel_c sys) {
@@ -378,7 +378,6 @@ public class Generator extends Task {
         throws IOException, RuntimeException, CoreException, InterruptedException 
     {
         // Call docgen.exe 
-        String homedir = System.getenv("BPHOMEDIR"); //$NON-NLS-1$
         String app = homedir + DOCGEN_DIR + DOCGEN_EXE;
         String outputfile = DOC_XML;
         File output = new File(workingDir + outputfile);
@@ -410,13 +409,27 @@ public class Generator extends Task {
         throws IOException, RuntimeException, CoreException, InterruptedException 
     {
         // Run xsltproc to convert doc.xml into doc.html
-        String homedir = System.getenv("BPHOMEDIR"); //$NON-NLS-1$
-        String app = homedir + DOCGEN_DIR + XSLTPROC_EXE;
+    	String xsltprocexe = XSLTPROC_EXE;
+        if ( isWindows() ) {
+        	xsltprocexe = xsltprocexe.concat(EXEFILE);
+        }
+        String app = homedir + DOCGEN_DIR + DOCBOOK_DIR + xsltprocexe;
+        File appFile = new File(app);
         String docbook_folder = homedir + XHTMLFILES;
         String workingDir = workDir.replaceAll("\\\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
         String input_xmlfile = workingDir + "/" + DOC_XML; 
         File output = new File(workingDir + "/" + DOC_HTML);
 
+        if ( ! appFile.exists() ) {
+        	Path appInPath = findProgramInPath(xsltprocexe);
+        	if ( appInPath == null ) {
+              RuntimeException re = new RuntimeException("Can not find xsltproc at \"" + app + "\" or in the path.\n\nDocument generation requires the tool \"xsltproc\". Please install it.\nSee https://github.com/xtuml/bridgepoint/blob/master/doc-bridgepoint/process/FAQ.md for additional help.");
+              throw re;            
+        	} else {
+        		app = appInPath.toOSString();
+        	}
+        }
+        
         if (output.exists()) {
             output.delete();
         }
@@ -549,4 +562,30 @@ public class Generator extends Task {
         return exitValue;
     }
 
+    public static Path findProgramInPath(String desiredProgram) {
+        ProcessBuilder pb = new ProcessBuilder(isWindows() ? "where" : "which", desiredProgram);
+        Path foundProgram = null;
+        try {
+            Process proc = pb.start();
+            int errCode = proc.waitFor();
+            if (errCode == 0) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()))) {
+                	// Found it!
+                    foundProgram = new Path(reader.readLine());
+                }
+            } else {
+            	System.err.println(desiredProgram + " not in PATH");
+            }
+        } catch (IOException ex) {
+        	System.err.println("Something went wrong while searching for " + desiredProgram);
+        } catch (InterruptedException ex) {
+        	System.err.println("Something went wrong while searching for " + desiredProgram);
+        }
+        return foundProgram;
+    }
+    
+    private static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
+    }
+    
 }

@@ -18,7 +18,7 @@ INSERT INTO EO VALUES ( '13',	'',	  '24',     'SystemModelPackage',0 , '', 'firs
 INSERT INTO EO VALUES ( '24', '24.1', '', 'Package', 1401, 'many', 'first', true );
 
 INSERT INTO EO VALUES ( '24.1',       '',          '24.10', 'PackageDiagram', 0, '', 'first', false );
-INSERT INTO EO VALUES ( '24.10',    '24.10.1', '', 'Packageable Element', 8000, 'many', 'first', false );
+INSERT INTO EO VALUES ( '24.10',    '24.10.1', '24.11', 'Packageable Element', 8000, 'many', 'first', false );
 INSERT INTO EO VALUES ( '24.10.1',  '1.5.3.1.1', '24.10.2', 'Data Type', 8001, 'one', 'first', false );
 INSERT INTO EO VALUES ( '24.10.2',  '6.2.1', '24.10.3',     'Interaction Participant', 8001, 'one', 'first', false );
 INSERT INTO EO VALUES ( '24.10.3',  '1.14.2.1', '24.10.4',       'Activity Node', 8001, 'one', 'first', false );
@@ -39,6 +39,7 @@ INSERT INTO EO VALUES ( '24.10.17',  '6.2.8.1', '24.10.18',  'Use Case Associati
 INSERT INTO EO VALUES ( '24.10.18',  '',        '24.10.19',  'Satisfaction', 8001, 'one', 'first', false );
 INSERT INTO EO VALUES ( '24.10.19',  '12.4.9.1.1', '24.10.20',       'Delegation', 8001, 'one', 'first', false );
 INSERT INTO EO VALUES ( '24.10.20',  '', '',                       'Exception', 8001, 'one', 'first', true );
+INSERT INTO EO VALUES ( '24.11',  '', '',  'Package Reference', 1402, 'one', 'first', false, false, 'refers to', false, false, ''  );
 
 INSERT INTO EO VALUES ( '12.4.1',       '',    '12.4.3',     'ComponentDiagram', 0, '', 'first', false );
 INSERT INTO EO VALUES ( '12.4.3',     '12.4.3.1',  '12.4.9',      'Port', 4010, 'many', 'first', false );             
@@ -394,9 +395,9 @@ INSERT INTO AEP VALUES ( '3.7', '3.5',		'->SM_NSTXN[R507]->SM_SEME[R504]->SM_SEV
 INSERT INTO AEP VALUES ( '3.7', '3.3',		'->SM_NSTXN[R507]->SM_SEME[R504]->SM_SEVT[R503]->SM_EVT[R525]->SM_EVTDI[R532]', 'many', true, false, false, true);
 
 -- export required poly info
-INSERT INTO AEP VALUES ( '3.7', '2.1',		'->SM_NSTXN[R507]->SM_SEME[R504]->SM_SEVT[R503]->SM_NLEVT[R526]->SM_PEVT[R527]->SM_EVT[R525]->SM_SM[R502]->SM_ISM[R517]->O_OBJ[R518]', 'one', true, true, false);
+INSERT INTO AEP VALUES ( '3.7', '2.1',		'->SM_NSTXN[R507]->SM_SEME[R504]->SM_SEVT[R503]->SM_NLEVT[R526]->SM_PEVT[R527]->SM_EVT[R525]->SM_SM[R502]->SM_ISM[R517]->O_OBJ[R518]', 'one', true, true, false, false, 'Doesnotcontaintransition(inst.getTrans_id())');
 INSERT INTO AEP VALUES ( '2.2', '2.1',		'->O_OBJ[R101]', 'one', true, true, false);
-INSERT INTO AEP VALUES ( '2.1', '2.1',    '->SM_ISM[R518]->SM_SM[R517]->SM_EVT[R502]->SM_SEVT[R525]->SM_NLEVT[R526]->SM_PEVT[R527]->SM_EVT[R525]->SM_SM[R502]->SM_ISM[R517]->O_OBJ[R518]', 'many', true, true, false);
+INSERT INTO AEP VALUES ( '2.1', '2.1',    '->SM_ISM[R518]->SM_SM[R517]->SM_EVT[R502]->SM_SEVT[R525]->SM_NLEVT[R526]->SM_PEVT[R527]->SM_EVT[R525]->SM_SM[R502]->SM_ISM[R517]->O_OBJ[R518]', 'many', true, true, false, false, 'getObj_id().equals(inst.getObj_id()) == false');
 
 -- export data items with event
 INSERT INTO AEP VALUES ( '3.5', '3.3',		'->SM_EVTDI[R532]', 'many', true, false, false);

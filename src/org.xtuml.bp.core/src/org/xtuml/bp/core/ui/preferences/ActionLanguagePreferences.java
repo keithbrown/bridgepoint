@@ -1,13 +1,5 @@
 package org.xtuml.bp.core.ui.preferences;
 //========================================================================
-//
-//File:      $RCSfile: ActionLanguagePreferences.java,v $
-//Version:   $Revision: 1.11 $
-//Modified:  $Date: 2012/08/27 19:20:00 $
-//
-//(c) Copyright 2006-2014 by Mentor Graphics Corp. All rights reserved.
-//
-//========================================================================
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not 
 // use this file except in compliance with the License.  You may obtain a copy 
 // of the License at
@@ -40,7 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-
+import org.xtuml.bp.core.Actiondialect_c;
 import org.xtuml.bp.core.CorePlugin;
 import org.xtuml.bp.core.common.BridgePointPreferencesModel;
 import org.xtuml.bp.core.ui.ICoreHelpContextIds;
@@ -49,6 +41,9 @@ import org.xtuml.bp.ui.preference.IPreferenceModel;
 public class ActionLanguagePreferences
   extends PreferencePage
   implements IWorkbenchPreferencePage {
+    private Group defaultDialectGroup;
+    private Button defaultDialectOALRadio;
+    private Button defaultDialectMASLRadio;
     private Group allowPromotionGroup;
     private Button allowPromotionYesRadio;
     private Button allowPromotionNoRadio;
@@ -84,11 +79,28 @@ public class ActionLanguagePreferences
     
     composite.setLayout(gl);
 
+    // Create the "default dialect" group box and set its layout
+    defaultDialectGroup = new Group(composite, SWT.SHADOW_ETCHED_IN);
+    defaultDialectGroup.setLayout(gl);
+
+    GridData data = new GridData(GridData.FILL_HORIZONTAL);
+    data.grabExcessHorizontalSpace = true;
+    defaultDialectGroup.setLayoutData(data);
+
+    // The "default" group box data
+    defaultDialectGroup.setText("Default action language dialect");
+
+    defaultDialectOALRadio = new Button(defaultDialectGroup, SWT.RADIO | SWT.LEFT);
+    defaultDialectOALRadio.setText("OAL");
+
+    defaultDialectMASLRadio = new Button(defaultDialectGroup, SWT.RADIO | SWT.LEFT);
+    defaultDialectMASLRadio.setText("MASL");
+
     // Create the "Allow promotion?" group box and set its layout
     allowPromotionGroup = new Group(composite, SWT.SHADOW_ETCHED_IN);
     allowPromotionGroup.setLayout(gl);
 
-    GridData data = new GridData(GridData.FILL_HORIZONTAL);
+    data = new GridData(GridData.FILL_HORIZONTAL);
     data.grabExcessHorizontalSpace = true;
     allowPromotionGroup.setLayoutData(data);
 
@@ -221,6 +233,15 @@ public class ActionLanguagePreferences
       model.getStore().loadModel(getPreferenceStore(), null, model);
       
       BridgePointPreferencesModel bpPrefs = (BridgePointPreferencesModel) model;
+      if (defaultDialectOALRadio.getSelection()) {
+          bpPrefs.defaultActionLanguageDialect = Actiondialect_c.oal;
+      }
+      else if ( defaultDialectMASLRadio.getSelection()) {
+          bpPrefs.defaultActionLanguageDialect = Actiondialect_c.masl;
+      }
+      else {
+          bpPrefs.defaultActionLanguageDialect = Actiondialect_c.oal;
+      }
       if (allowPromotionYesRadio.getSelection()) {
           bpPrefs.allowIntToRealPromotion = MessageDialogWithToggle.ALWAYS;
       }
@@ -293,6 +314,19 @@ public class ActionLanguagePreferences
       // or defaults) before this function is called.  Calling model.loadModel(...)
       // here would overwrite the population of the default model data in
       // performDefaults().
+
+      if (bpPrefs.defaultActionLanguageDialect == Actiondialect_c.oal) {
+          defaultDialectOALRadio.setSelection(true);
+          defaultDialectMASLRadio.setSelection(false);
+      }
+      else if (bpPrefs.defaultActionLanguageDialect == Actiondialect_c.masl) {
+          defaultDialectOALRadio.setSelection(false);
+          defaultDialectMASLRadio.setSelection(true);
+      }
+      else {
+          defaultDialectOALRadio.setSelection(true);
+          defaultDialectMASLRadio.setSelection(false);
+      }
       
       if (bpPrefs.allowIntToRealPromotion.equals(MessageDialogWithToggle.ALWAYS)) {
           allowPromotionYesRadio.setSelection(true);
