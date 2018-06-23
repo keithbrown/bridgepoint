@@ -85,6 +85,7 @@ necessary to introduce a bridging component into the MASL system that replicates
 flexibility. The idiom illustrated below offers the same level of domain isolation in xtUML 
 that the MASL approach affords.  
   
+// TODO - use new GPS Watch
 ![MASL Idiom Example](images/image04.png)  
 __Figure 1__  
 
@@ -103,12 +104,6 @@ component (the green component in Figure 1) from scratch. After the provided int
 formalized, the port must be renamed from its default name (e.g. "Port1") to 
 `<domain>__<terminator>` with the double-underscore separating the domain and terminator 
 names.  
-
-### Deferred Operations
-
-To create a deferred operation, create an operation with an identical signature in each 
-subtype class.  Then use the Properties view to set the dialect of the supertype class' 
-operation to "None".  Each subtype class' operation dialect is set to "MASL".
 
 ### 3.2 Domain Services and Terminator Services 
 
@@ -155,6 +150,8 @@ Component References (MASL Domains).
 For MASL Projects that are converted and imported into BridgePoint, this description field 
 is set automatically.  
 
+TODO - show screenshot  
+
 ## 4 xtUML Model Packaging for System-wide MASL Visibility
 
 ### 4.1 Packaging Overview  
@@ -187,19 +184,20 @@ is leveraged. The xtUML Project in a workspace that is a MASL Project will enabl
 thus will gain access to the components, interfaces, and types shared by the MASL Domain 
 projects in the workspace. IPRs should remain off for domain projects.
 
+TODO - goes with Figure 1 - update to match
 ![MASL Project Layout](images/image03.png)  
 __Figure 3__  
   
 A typical xtUML project using this approach is illustrated in Figure 3. Note that all 
 shared types defined in the MASL Domain are contained within the Shared package associated 
 with that MASL Domain, and these type definitions are not included in the component 
-representing the MASL Domain. With BridgePoint xtUML, the conversion facility produces a 
-single xtUML model file adhering to the packaging and naming scheme illustrated. Modelers 
-are free to repackage and rename their models as they see fit, so long as these two 
-conditions are met:  
+representing the MASL Domain.   
 
-* all elements shared among components are defined outside the components that refer to them  
-* all elements associated with a MASL Domain reside within the domain package for that MASL Domain  
+> With BridgePoint xtUML, the conversion facility produces a single xtUML model file 
+> adhering to the packaging and naming scheme illustrated. Modelers are free to repackage 
+> and rename their models as they see fit, so long as these two conditions are met:  
+> * all elements shared among components are defined outside the components that refer to them  
+> * all elements associated with a MASL Domain reside within the domain package for that MASL Domain  
   
 Types that a domain intends to make public to the outside world should be created in the 
 "Shared" package that is a sibling to the component (domain).  The "Shared" package also 
@@ -248,7 +246,9 @@ a dependency to the `<other domain>.int` file into the local project's
 To access shared types from other domains in the structural part of the model, the modeler 
 must create a type reference in the local domain.  This is done by creating a new UDT in 
 the current domain with a special name that references the domain where the type actually 
-lives (e.g. `OtherDom::someType`).  
+lives (e.g. `OtherDom::someType`).   
+* TODO - Where in the local domain should this go?
+* TODO - What is special about the local UDT, is it based on MASLtype?
 
 
 ## 5 BridgePoint Extensions for MASL
@@ -411,15 +411,6 @@ preferences (__Figure 4__). The preference is located under __Window > Preferenc
 and after selecting the button next to desired editor, __&lt;click&gt; OK__ to close the 
 window.
 
-#### Accessing Service Domains (TODO - move)
-
-To access shared implementations from service domains the modeler must create a dependency 
-to the `<other domain>.int` file or a folder containing one or more `<other domain>.int` 
-files in the local project's [Dependencies project preferences](../../UserInterface/xtUMLModeling/Preferences/ProjDependencies.html).   
-
-When a folder dependency is specified, all MASL `*.int` files directly under the folder are 
-parsed as part of the local project's validation process.  
-
 #### 5.4.3 Inter-Project References and MASL
 
 The MASL-xtUML idiom uses Inter-Project References (IPRs) to provide system-wide scope to 
@@ -442,6 +433,24 @@ preference must be set prior to importing the file created by `masl2xtuml`.
 __Figure 5__  
 
   
+## 6 Special MASL constructs in xtUML  
+
+### 6.1  Deferred Operations
+
+To create a deferred operation, create an operation with an identical signature in each 
+subtype class.  Then use the Properties view to set the dialect of the supertype class' 
+operation to "None".  Each subtype class' operation dialect is set to "MASL".  
+
+### 6.2 Accessing Service Domains
+
+To access shared implementations from service domains the modeler must create a dependency 
+to the `<other domain>.int` file or a folder containing one or more `<other domain>.int` 
+files in the local project's [Dependencies project preferences](../../UserInterface/xtUMLModeling/Preferences/ProjDependencies.html).   
+
+When a folder dependency is specified, all MASL `*.int` files directly under the folder are 
+parsed as part of the local project's validation process.  
+
+
 ## Appendix A.  the GPS Watch Example
 
 To demonstrate the MASL extensions of BridgePoint xtUML, the GPS Watch example (Figure 6) 
